@@ -96,7 +96,8 @@ services:
       KC_HOSTNAME: ${KC_URL_PUBLICA:-http://localhost:8180}
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
       KC_HEALTH_ENABLED: "true"
-      KC_PROXY_HEADERS: ${KC_PROXY_HEADERS:-}
+      # Sem valor: repassa do ambiente/.env só se definida (prod: xforwarded). Vazia, o Keycloak não sobe.
+      KC_PROXY_HEADERS:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USUARIO:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_SENHA:-admin}
       JAVA_OPTS_KC_HEAP: "-XX:MaxRAMPercentage=60 -XX:InitialRAMPercentage=30"
