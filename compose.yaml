@@ -25,8 +25,8 @@ x-backend: &backend
     DB_URL: jdbc:postgresql://postgres:5432/clinica
     DB_APP_USER: clinica_app
     DB_APP_PASSWORD: ${DB_APP_PASSWORD:-demo-app}
-    DB_MIGRATION_USER: clinica_migracao
-    DB_MIGRATION_PASSWORD: ${DB_MIGRATION_PASSWORD:-demo-migracao}
+    SPRING_FLYWAY_USER: clinica_migracao
+    SPRING_FLYWAY_PASSWORD: ${DB_MIGRATION_PASSWORD:-demo-migracao}
     REDIS_HOST: redis
     REDIS_PASSWORD: ${REDIS_PASSWORD:-demo-redis}
     OIDC_CLIENT_ID: clinica-bff

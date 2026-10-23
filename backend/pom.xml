@@ -102,7 +102,7 @@
         <!-- Jobs persistidos -->
         <dependency>
             <groupId>com.github.kagkarlsson</groupId>
-            <artifactId>db-scheduler-spring-boot-starter</artifactId>
+            <artifactId>db-scheduler-spring-boot-4-starter</artifactId>
             <version>${db-scheduler.version}</version>
         </dependency>
 

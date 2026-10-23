@@ -11,9 +11,9 @@ spring:
     password: ${DB_APP_PASSWORD:}
     hikari:
       maximum-pool-size: ${DB_POOL_MAX:10}
+  # O usuário de migração (dono do schema) é informado só no compose via SPRING_FLYWAY_USER/PASSWORD;
+  # sem ele (testes), o Flyway usa a mesma conexão do datasource.
   flyway:
-    user: ${DB_MIGRATION_USER:${spring.datasource.username}}
-    password: ${DB_MIGRATION_PASSWORD:${spring.datasource.password}}
     locations: classpath:db/migration
   jpa:
     open-in-view: false
