@@ -31,6 +31,9 @@ navegador-clinica
 - Política TOTP: SHA-1, 6 dígitos, 30 s (compatível com os apps comuns); código não reutilizável.
 - O fluxo é escolhido pela variável `KC_FLUXO_NAVEGADOR` (padrão `navegador-clinica`). No demo, quem quiser
   explorar sem celular pode usar `KC_FLUXO_NAVEGADOR=browser`, que desliga o 2º fator.
+- Cadastro: fluxo explícito `cadastro-clinica` (`registration-user-creation` + `registration-password-action`).
+  Sem ele, a importação de um realm com fluxos próprios gerava um formulário de cadastro **sem senha**
+  (achado pelo E2E em 2026-10-23).
 - Pacientes: senha forte (`passwordPolicy` com lista de senhas vazadas) e e-mail verificado; MFA opcional
   fica para depois.
 - Coberto por E2E (`frontend/e2e/equipe-mfa.spec.ts`): cadastro do TOTP no 1º login, login seguinte com
