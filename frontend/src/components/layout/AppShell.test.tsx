@@ -9,14 +9,15 @@ const recepcao: UsuarioAtual = {
   id: '1',
   nome: 'Renata Recepção',
   papeis: ['RECEPCAO'],
-  permissoes: ['clinica:ler', 'profissionais:ler', 'ausencias:gerir', 'pacientes:ler', 'pacientes:escrever', 'caixa-saida:ler'],
+  permissoes: ['clinica:ler', 'profissionais:ler', 'ausencias:gerir', 'agenda:ler', 'agenda:escrever', 'pacientes:ler',
+    'pacientes:escrever', 'caixa-saida:ler'],
   ambienteDemo: true,
 }
 const paciente: UsuarioAtual = {
   id: '2',
   nome: 'Carla Mendes',
   papeis: ['PACIENTE'],
-  permissoes: ['cadastro-proprio:gerir'],
+  permissoes: ['cadastro-proprio:gerir', 'agendamento-proprio:gerir'],
   ambienteDemo: false,
 }
 const profissional: UsuarioAtual = {
@@ -28,9 +29,9 @@ const profissional: UsuarioAtual = {
 }
 
 describe('itensVisiveis', () => {
-  it('mostra à recepção pacientes, equipe e a caixa de saída (demo)', () => {
+  it('mostra à recepção a agenda, pacientes, equipe e a caixa de saída (demo)', () => {
     expect(itensVisiveis(recepcao).map((i) => i.rota)).toEqual([
-      '/agenda', '/agendar', '/pacientes', '/profissionais', '/servicos', '/caixa-saida',
+      '/agenda', '/pacientes', '/profissionais', '/servicos', '/caixa-saida',
     ])
   })
 
@@ -39,7 +40,7 @@ describe('itensVisiveis', () => {
   })
 
   it('mostra ao paciente o agendamento e o próprio cadastro', () => {
-    expect(itensVisiveis(paciente).map((i) => i.rota)).toEqual(['/agendar', '/meu-cadastro'])
+    expect(itensVisiveis(paciente).map((i) => i.rota)).toEqual(['/agendar', '/meus-agendamentos', '/meu-cadastro'])
   })
 
   it('mostra ao profissional a própria agenda, sem gestão da equipe', () => {

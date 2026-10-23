@@ -1,6 +1,6 @@
 # ADR-0004: Overbooking impedido por EXCLUDE constraint no PostgreSQL
 
-- Status: Proposto · Data: 2026-10-22
+- Status: **Aceito** (implementado na Fase 2, ver ADR-0019) · Data: 2026-10-22
 
 ## Decisão
 - A coluna `agendamento.periodo tstzrange '[)'` tem uma constraint `EXCLUDE USING gist (clinica_id =,

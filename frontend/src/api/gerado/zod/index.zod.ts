@@ -1,4 +1,6 @@
+export * from './agenda-dia/agenda-dia.zod';
 export * from './agenda-profissional/agenda-profissional.zod';
+export * from './agendamentos/agendamentos.zod';
 export * from './ambiente/ambiente.zod';
 export * from './auditoria/auditoria.zod';
 export * from './caixa-saida/caixa-saida.zod';
@@ -6,6 +8,7 @@ export * from './catalogo-publico/catalogo-publico.zod';
 export * from './clinica/clinica.zod';
 export * from './clinica-publica/clinica-publica.zod';
 export * from './configuracao/configuracao.zod';
+export * from './disponibilidade/disponibilidade.zod';
 export * from './meu-cadastro/meu-cadastro.zod';
 export * from './pacientes/pacientes.zod';
 export * from './profissionais/profissionais.zod';

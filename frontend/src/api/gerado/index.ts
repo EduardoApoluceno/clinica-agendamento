@@ -1,4 +1,6 @@
+export * from './agenda-dia/agenda-dia';
 export * from './agenda-profissional/agenda-profissional';
+export * from './agendamentos/agendamentos';
 export * from './ambiente/ambiente';
 export * from './auditoria/auditoria';
 export * from './caixa-saida/caixa-saida';
@@ -6,6 +8,7 @@ export * from './catalogo-publico/catalogo-publico';
 export * from './clinica/clinica';
 export * from './clinica-publica/clinica-publica';
 export * from './configuracao/configuracao';
+export * from './disponibilidade/disponibilidade';
 export * from './meu-cadastro/meu-cadastro';
 export * from './pacientes/pacientes';
 export * from './profissionais/profissionais';

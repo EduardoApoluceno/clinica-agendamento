@@ -1,6 +1,7 @@
 package br.com.clinica.compartilhado.application;
 
 import br.com.clinica.compartilhado.domain.Papel;
+import br.com.clinica.compartilhado.domain.Permissao;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,6 +24,11 @@ public record Ator(String sub, String nome, Set<Papel> papeis, Optional<String> 
 
     public boolean possui(Papel papel) {
         return papeis.contains(papel);
+    }
+
+    /** Algum dos papéis concede a permissão? */
+    public boolean tem(Permissao permissao) {
+        return papeis.stream().anyMatch(p -> p.permissoes().contains(permissao));
     }
 
     /** Papel principal para registro em auditoria. */

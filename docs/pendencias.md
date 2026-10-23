@@ -1,6 +1,39 @@
 # Pendências
 
-## Estado em 2026-10-23: Fase 1 concluída e fechada (CI todo verde, inclusive o E2E)
+## Estado em 2026-10-23: Fase 2 entregue (agenda)
+
+### Pronto
+- **Backend (módulo agenda):** agendamento com a constraint anti-overbooking (migração V7), trava por
+  profissional, concorrência otimista na remarcação, histórico append-only e auditoria de cada transição.
+  Cancelamento, confirmação, presença, falta e conclusão. Eventos de domínio (`EventosAgenda`) e job que
+  expira holds vencidos. Disponibilidade pública com antecedência e horizonte, e avisos em tempo real
+  por SSE. Grade do dia por profissional, "meus agendamentos" e arquivo `.ics`. Decisões no ADR-0019.
+- **Permissões:** `agenda:ler`, `agenda:escrever` (ADMIN, RECEPCAO) e `agendamento-proprio:gerir`
+  (PACIENTE). O profissional vê e conduz só a própria agenda.
+- **Frontend:** Agenda do dia (resumo, navegação, grade por profissional, painel com confirmar, presença,
+  falta, concluir, remarcar e cancelar, novo agendamento com busca de paciente). Portal do paciente em
+  4 etapas, com tela de sucesso, Google Agenda e `.ics`. Meus agendamentos (confirmar, remarcar, cancelar).
+- **Demonstração:** a semente cria serviços, 2 profissionais com expediente, 6 pacientes (Carla e Diego
+  vinculados às contas de teste, com celular verificado) e cerca de 300 agendamentos de 14 dias para trás
+  e para frente. O realm de demonstração passou a ter ids fixos: recrie o banco uma vez
+  (`docker compose --profile demo down -v`).
+- **Testes:** unitários de domínio e aplicação da agenda, integração com PostgreSQL real (20 requisições
+  simultâneas no mesmo horário → 1×201 e 19×409, RBAC/IDOR, paciente agendando para si) e Playwright
+  (paciente agenda e cancela pelo portal; recepção agenda pela grade).
+
+### Abertas da Fase 2
+1. **Cobrança antecipada desligada** (`app.agenda.cobranca-antecipada=false`) até a Fase 4. O hold,
+   a expiração e a liberação já estão prontos.
+2. **"Enviar lembrete no WhatsApp"** (Fase 3) e **"Oferecer à lista de espera"** (Fase 4) aparecem
+   desabilitados, com "(em breve)".
+3. **Feriados** ainda não entram na disponibilidade: a tabela existe, mas não há tela para cadastrá-los.
+4. **Rate limiting** (Bucket4j + Redis) nos endpoints públicos (disponibilidade e SSE), em login e em
+   cadastro ainda não existe. O SSE tem limite próprio de conexões.
+5. O E2E da recepção cadastra o TOTP de `recepcao@clinica.local`: como o de MFA, precisa de banco
+   descartável.
+6. Encaixe fora do expediente não é permitido nem para a recepção (avaliar com a clínica).
+
+## Fase 1 concluída e fechada em 2026-10-23 (CI todo verde, inclusive o E2E)
 
 ### Pronto (backend + Keycloak)
 - **Clínica:** dados e regras da agenda, com concorrência otimista, endpoint público e criação idempotente na 1ª subida.

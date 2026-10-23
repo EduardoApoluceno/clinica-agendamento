@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,10 +17,12 @@ class AgendaProfissionalRepositorioJpa implements AgendaProfissionalRepositorio 
 
     private final ExpedienteFaixaJpa faixas;
     private final AusenciaJpa ausencias;
+    private final JdbcTemplate jdbc;
 
-    AgendaProfissionalRepositorioJpa(ExpedienteFaixaJpa faixas, AusenciaJpa ausencias) {
+    AgendaProfissionalRepositorioJpa(ExpedienteFaixaJpa faixas, AusenciaJpa ausencias, JdbcTemplate jdbc) {
         this.faixas = faixas;
         this.ausencias = ausencias;
+        this.jdbc = jdbc;
     }
 
     @Override
@@ -54,6 +57,9 @@ class AgendaProfissionalRepositorioJpa implements AgendaProfissionalRepositorio 
 
     @Override
     public void salvarAusencia(ClinicaId clinica, Ausencia ausencia, String criadoPor) {
+        // Mesma trava que o módulo agenda pega ao marcar horário (ADR-0004): ausência × agendamento em série.
+        jdbc.query("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", rs -> null,
+                "agenda:" + clinica.valor() + ":" + ausencia.profissionalId());
         AusenciaEntity e = new AusenciaEntity();
         e.id = ausencia.id();
         e.clinicaId = clinica.valor();

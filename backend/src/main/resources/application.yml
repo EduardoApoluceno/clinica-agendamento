@@ -81,6 +81,9 @@ springdoc:
     enabled: ${OPENAPI_ATIVO:false}
 
 app:
+  agenda:
+    # Sinal/pagamento integral antes da consulta (hold de horário). Liga na Fase 4, com o módulo de pagamentos.
+    cobranca-antecipada: ${AGENDA_COBRANCA_ANTECIPADA:false}
   clinica:
     id: ${APP_CLINICA_ID:00000000-0000-0000-0000-000000000001}
     nome-inicial: ${APP_CLINICA_NOME:Clínica}
@@ -111,6 +114,13 @@ app:
   demo:
     ativo: true
     expor-codigos: true
+    # Contas de teste do realm de demonstração (ids fixos no clinica-realm.json): a semente vincula a elas
+    # os profissionais e pacientes fictícios.
+    contas:
+      dra-ana: d3e00000-0000-4000-8000-000000000003
+      dr-bruno: d3e00000-0000-4000-8000-000000000004
+      carla: d3e00000-0000-4000-8000-000000000005
+      diego: d3e00000-0000-4000-8000-000000000006
   criptografia:
     chaves:
       k1: ${APP_CRIPTO_CHAVE_K1:23zDWKrsjR+k4rhJxTnGS97I1mA80NWbWYQveTp5q2U=}
@@ -130,6 +140,11 @@ app:
   demo:
     ativo: true
     expor-codigos: true
+    # No login simplificado o "sub" é o próprio nome de usuário.
+    contas:
+      dra-ana: dra.ana
+      dr-bruno: dr.bruno
+      carla: paciente1
   criptografia:
     chaves:
       k1: ${APP_CRIPTO_CHAVE_K1:23zDWKrsjR+k4rhJxTnGS97I1mA80NWbWYQveTp5q2U=}

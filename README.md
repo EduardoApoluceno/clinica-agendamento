@@ -3,9 +3,10 @@
 Monólito modular (Java 25 + Spring Boot 4.1 + Spring Modulith) com frontend React 19, Keycloak (BFF
 OAuth2/OIDC), PostgreSQL 18 e Redis. Roda 100% local com Docker, sem nenhuma conta externa.
 
-> **Estado atual: Fase 1 concluída (cadastros e acesso).** Login com MFA para a equipe, permissões por
-> papel, clínica, profissionais (serviços, expediente, ausências), pacientes com dados cifrados e
-> consentimentos LGPD, auditoria com hash encadeado e testes de ponta a ponta. Próxima: Fase 2 (agenda).
+> **Estado atual: Fase 2 entregue (agenda).** Disponibilidade em tempo real, agendamento sem overbooking
+> (constraint no PostgreSQL), remarcação e cancelamento, Agenda do dia da recepção e portal de agendamento
+> do paciente, sobre a Fase 1 (login com MFA, permissões, cadastros com dados cifrados, auditoria).
+> Próxima: Fase 3 (notificações).
 > Veja [`docs/arquitetura/00-proposta-fase0.md`](docs/arquitetura/00-proposta-fase0.md) e
 > [`docs/pendencias.md`](docs/pendencias.md).
 
@@ -49,6 +50,12 @@ Todos os serviços escutam só em `127.0.0.1`. Nada fica exposto na rede.
 | `dr.bruno@clinica.local` | PROFISSIONAL |
 | `carla@exemplo.com` · `diego@exemplo.com` · `elisa@exemplo.com` | PACIENTE |
 
+O perfil demo já sobe com dados fictícios: serviços, a Dra. Ana e o Dr. Bruno com expediente, seis pacientes
+e agendamentos de duas semanas para trás e para frente. Carla e Diego já têm cadastro com celular
+verificado e podem agendar pelo portal. Elisa ainda precisa completar o cadastro. Se você subiu o demo
+antes da Fase 2, recrie o banco uma vez (`docker compose --profile demo down -v`) para importar o realm
+atualizado e gerar os dados.
+
 ### Máquinas com 8 GB: perfil `demo-leve`
 
 ```bash
@@ -77,13 +84,13 @@ cd frontend && npm ci && npm run dev   # http://localhost:5173 (proxy para o com
 npm test && npm run lint && npm run typecheck
 npm run api:gerar                       # gera cliente TanStack Query + Zod via Orval (compose de pé)
 
-# ponta a ponta (Playwright) contra o perfil demo; cria contas e cadastra TOTP do dr.bruno
+# ponta a ponta (Playwright) contra o perfil demo; cria contas e cadastra TOTP da equipe
 npx playwright install chromium && npm run e2e
-# autocadastro, "Esqueceu sua senha?" e MFA da equipe
+# autocadastro, "Esqueceu sua senha?", MFA da equipe, agendamento pelo portal e pela recepção
 ```
 
-Rode o E2E num banco descartável (`docker compose --profile demo down -v` antes): o teste de MFA espera
-que o `dr.bruno@clinica.local` ainda não tenha TOTP. No CI, o job **E2E Playwright** sobe a stack do zero.
+Rode o E2E num banco descartável (`docker compose --profile demo down -v` antes): os testes da equipe
+esperam que `dr.bruno@clinica.local` e `recepcao@clinica.local` ainda não tenham TOTP. No CI, o job **E2E Playwright** sobe a stack do zero.
 
 Os testes de integração do backend usam Testcontainers, então o Docker precisa estar em execução.
 

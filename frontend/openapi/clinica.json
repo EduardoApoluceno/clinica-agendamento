@@ -891,6 +891,241 @@
         }
       }
     },
+    "/api/v1/agendamentos": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosAgendar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovoAgendamento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/remarcacao": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosRemarcar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Remarcacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/presenca": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosPresenca",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/falta": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosFalta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/confirmacao": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosConfirmar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/conclusao": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosConcluir",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/cancelamento": {
+      "post": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosCancelar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cancelamento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/profissionais/{id}/ativo": {
       "patch": {
         "tags": [
@@ -971,6 +1206,98 @@
                   "items": {
                     "$ref": "#/components/schemas/ProfissionalPublico"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/disponibilidade": {
+      "get": {
+        "tags": [
+          "disponibilidade"
+        ],
+        "operationId": "disponibilidadeHorarios",
+        "parameters": [
+          {
+            "name": "servicoId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "profissionalId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "de",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HorarioDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/disponibilidade/stream": {
+      "get": {
+        "tags": [
+          "disponibilidade"
+        ],
+        "operationId": "disponibilidadeAvisos",
+        "parameters": [
+          {
+            "name": "profissionalId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/SseEmitter"
                 }
               }
             }
@@ -1112,6 +1439,29 @@
         }
       }
     },
+    "/api/v1/me/agendamentos": {
+      "get": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosMeus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgendamentoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/demo/caixa-saida": {
       "get": {
         "tags": [
@@ -1219,6 +1569,99 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PaginaRegistroAuditoria"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}": {
+      "get": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosDetalhe",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendamentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agendamentos/{id}/calendario.ics": {
+      "get": {
+        "tags": [
+          "agendamentos"
+        ],
+        "operationId": "agendamentosCalendario",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/calendar": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agenda/dia": {
+      "get": {
+        "tags": [
+          "agendaDia"
+        ],
+        "operationId": "agendaDiaDia",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendaDiaDto"
                 }
               }
             }
@@ -2032,6 +2475,150 @@
           }
         }
       },
+      "NovoAgendamento": {
+        "type": "object",
+        "properties": {
+          "servicoId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profissionalId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "pacienteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "observacao": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "inicio",
+          "profissionalId",
+          "servicoId"
+        ]
+      },
+      "AgendamentoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profissionalId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profissional": {
+            "type": "string"
+          },
+          "pacienteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paciente": {
+            "type": "string"
+          },
+          "servicoId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "servico": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RESERVADO",
+              "AGUARDANDO_CONFIRMACAO",
+              "CONFIRMADO",
+              "PRESENTE",
+              "REALIZADO",
+              "FALTA",
+              "CANCELADO",
+              "EXPIRADO"
+            ]
+          },
+          "origem": {
+            "type": "string",
+            "enum": [
+              "PORTAL",
+              "WHATSAPP",
+              "RECEPCAO",
+              "LISTA_ESPERA",
+              "ASSISTENTE_PORTAL"
+            ]
+          },
+          "reservaExpiraEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "precoCentavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "valorAntecipadoCentavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "observacao": {
+            "type": "string"
+          },
+          "canceladoEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivoCancelamento": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Remarcacao": {
+        "type": "object",
+        "properties": {
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "inicio"
+        ]
+      },
+      "Cancelamento": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          }
+        }
+      },
       "AtivoRequisicao": {
         "type": "object",
         "properties": {
@@ -2113,6 +2700,31 @@
               "format": "uuid"
             },
             "uniqueItems": true
+          }
+        }
+      },
+      "HorarioDto": {
+        "type": "object",
+        "properties": {
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "livre": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SseEmitter": {
+        "type": "object",
+        "properties": {
+          "timeout": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2353,6 +2965,90 @@
             "additionalProperties": {
               "type": "string"
             }
+          }
+        }
+      },
+      "AgendaDiaDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "colunas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColunaDto"
+            }
+          },
+          "resumo": {
+            "$ref": "#/components/schemas/Resumo"
+          }
+        }
+      },
+      "ColunaDto": {
+        "type": "object",
+        "properties": {
+          "profissionalId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profissional": {
+            "type": "string"
+          },
+          "expediente": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntervaloDto"
+            }
+          },
+          "ausencias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AusenciaDto"
+            }
+          },
+          "agendamentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendamentoDto"
+            }
+          },
+          "livres": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntervaloDto"
+            }
+          }
+        }
+      },
+      "IntervaloDto": {
+        "type": "object",
+        "properties": {
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Resumo": {
+        "type": "object",
+        "properties": {
+          "agendados": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "aguardandoConfirmacao": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "livres": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }

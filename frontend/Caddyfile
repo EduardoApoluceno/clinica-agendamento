@@ -10,7 +10,9 @@
 # HTTP interno. Em demo é acessado direto em http://localhost:8080 (localhost é contexto seguro);
 # em prod o Caddy compartilhado (borda) termina o TLS e encaminha para cá.
 :8080 {
-	encode zstd gzip
+	# SSE (avisos de disponibilidade) não pode ser comprimido: o encoder segura os eventos no buffer.
+	@comprimivel not path */stream
+	encode @comprimivel zstd gzip
 
 	header {
 		-Server

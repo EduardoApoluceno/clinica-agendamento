@@ -1,5 +1,8 @@
 package br.com.clinica.compartilhado.domain;
 
+import static br.com.clinica.compartilhado.domain.Permissao.AGENDAMENTO_PROPRIO;
+import static br.com.clinica.compartilhado.domain.Permissao.AGENDA_ESCREVER;
+import static br.com.clinica.compartilhado.domain.Permissao.AGENDA_LER;
 import static br.com.clinica.compartilhado.domain.Permissao.AGENDA_PROPRIA_GERIR;
 import static br.com.clinica.compartilhado.domain.Permissao.AUDITORIA_LER;
 import static br.com.clinica.compartilhado.domain.Permissao.AUSENCIAS_GERIR;
@@ -23,11 +26,13 @@ import java.util.Set;
 /** Papéis de acesso (RBAC) e a matriz de permissões de cada um. */
 public enum Papel {
     ADMIN(EnumSet.of(CLINICA_LER, CLINICA_ADMINISTRAR, PROFISSIONAIS_LER, PROFISSIONAIS_ADMINISTRAR, AUSENCIAS_GERIR,
-            PACIENTES_LER, PACIENTES_ESCREVER, PACIENTES_ANONIMIZAR, AUDITORIA_LER, CAIXA_SAIDA_LER)),
-    RECEPCAO(EnumSet.of(CLINICA_LER, PROFISSIONAIS_LER, AUSENCIAS_GERIR, PACIENTES_LER, PACIENTES_ESCREVER,
+            AGENDA_LER, AGENDA_ESCREVER, PACIENTES_LER, PACIENTES_ESCREVER, PACIENTES_ANONIMIZAR, AUDITORIA_LER,
             CAIXA_SAIDA_LER)),
+    RECEPCAO(EnumSet.of(CLINICA_LER, PROFISSIONAIS_LER, AUSENCIAS_GERIR, AGENDA_LER, AGENDA_ESCREVER, PACIENTES_LER,
+            PACIENTES_ESCREVER, CAIXA_SAIDA_LER)),
+    /** Vê e conduz só a própria agenda (agenda-propria:gerir); a grade completa é da recepção. */
     PROFISSIONAL(EnumSet.of(CLINICA_LER, PROFISSIONAIS_LER, AGENDA_PROPRIA_GERIR, PACIENTES_LER)),
-    PACIENTE(EnumSet.of(CADASTRO_PROPRIO));
+    PACIENTE(EnumSet.of(CADASTRO_PROPRIO, AGENDAMENTO_PROPRIO));
 
     public static final String PREFIXO_AUTORIDADE = "ROLE_";
 

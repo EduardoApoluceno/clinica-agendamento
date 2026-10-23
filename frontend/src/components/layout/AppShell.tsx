@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { NavLink } from 'react-router'
 import {
-  BarChart3, CalendarClock, CalendarDays, CalendarPlus, ClipboardList, Inbox, LogOut, Menu, Settings, ShieldCheck,
+  BarChart3, CalendarCheck, CalendarClock, CalendarDays, CalendarPlus, ClipboardList, Inbox, LogOut, Menu, Settings, ShieldCheck,
   Stethoscope, UserRound, Users, X, type LucideIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -23,8 +23,9 @@ interface ItemMenu {
 const GESTAO_EQUIPE = ['profissionais:administrar', 'ausencias:gerir']
 
 export const ITENS_MENU: ItemMenu[] = [
-  { rota: '/agenda', rotulo: 'Agenda do dia', icone: CalendarDays, papeis: ['ADMIN', 'RECEPCAO', 'PROFISSIONAL'] },
-  { rota: '/agendar', rotulo: 'Agendar consulta', icone: CalendarPlus, papeis: ['PACIENTE', 'RECEPCAO'] },
+  { rota: '/agenda', rotulo: 'Agenda do dia', icone: CalendarDays, permissoes: ['agenda:ler', 'agenda-propria:gerir'] },
+  { rota: '/agendar', rotulo: 'Agendar consulta', icone: CalendarPlus, permissoes: ['agendamento-proprio:gerir'] },
+  { rota: '/meus-agendamentos', rotulo: 'Meus agendamentos', icone: CalendarCheck, permissoes: ['agendamento-proprio:gerir'] },
   { rota: '/minha-agenda', rotulo: 'Minha agenda', icone: CalendarClock, permissoes: ['agenda-propria:gerir'] },
   { rota: '/pacientes', rotulo: 'Pacientes', icone: Users, permissoes: ['pacientes:ler'] },
   { rota: '/profissionais', rotulo: 'Profissionais', icone: Stethoscope, permissoes: GESTAO_EQUIPE },

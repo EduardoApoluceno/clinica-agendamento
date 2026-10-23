@@ -160,6 +160,7 @@
   ],
   "users": [
     {
+      "id": "d3e00000-0000-4000-8000-000000000001",
       "username": "admin@clinica.local",
       "email": "admin@clinica.local",
       "emailVerified": true,
@@ -178,6 +179,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000002",
       "username": "recepcao@clinica.local",
       "email": "recepcao@clinica.local",
       "emailVerified": true,
@@ -196,6 +198,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000003",
       "username": "dra.ana@clinica.local",
       "email": "dra.ana@clinica.local",
       "emailVerified": true,
@@ -214,6 +217,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000004",
       "username": "dr.bruno@clinica.local",
       "email": "dr.bruno@clinica.local",
       "emailVerified": true,
@@ -232,6 +236,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000005",
       "username": "carla@exemplo.com",
       "email": "carla@exemplo.com",
       "emailVerified": true,
@@ -250,6 +255,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000006",
       "username": "diego@exemplo.com",
       "email": "diego@exemplo.com",
       "emailVerified": true,
@@ -268,6 +274,7 @@
       ]
     },
     {
+      "id": "d3e00000-0000-4000-8000-000000000007",
       "username": "elisa@exemplo.com",
       "email": "elisa@exemplo.com",
       "emailVerified": true,

@@ -38,7 +38,8 @@ class PapelTest {
                 .doesNotContain(Permissao.AUDITORIA_LER, Permissao.PROFISSIONAIS_ADMINISTRAR);
         assertThat(Papel.PROFISSIONAL.permissoes()).contains(Permissao.PACIENTES_LER)
                 .doesNotContain(Permissao.PACIENTES_ESCREVER);
-        assertThat(Papel.PACIENTE.permissoes()).containsExactly(Permissao.CADASTRO_PROPRIO);
+        assertThat(Papel.PACIENTE.permissoes()).containsExactlyInAnyOrder(Permissao.CADASTRO_PROPRIO,
+                Permissao.AGENDAMENTO_PROPRIO);
         assertThat(Permissao.PACIENTES_LER.autoridade()).isEqualTo("pacientes:ler");
     }
 }

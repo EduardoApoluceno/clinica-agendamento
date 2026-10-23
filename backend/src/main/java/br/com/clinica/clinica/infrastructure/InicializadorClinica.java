@@ -13,14 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Garante que a clínica configurada exista (primeira subida). Os dados iniciais são provisórios e
- * devem ser completados pelo ADMIN na tela de configurações. Idempotente.
+ * devem ser completados pelo ADMIN na tela de configurações. Idempotente. Roda antes das sementes do demo.
  */
 @Component
+@Order(0)
 class InicializadorClinica implements ApplicationRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(InicializadorClinica.class);

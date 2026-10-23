@@ -9,6 +9,9 @@ import { EmConstrucao } from '@/pages/EmConstrucao'
 import { Inicio } from '@/pages/Inicio'
 
 // Cada tela vira um pedaço separado do bundle: o paciente não baixa as telas da equipe.
+const AgendaDiaPage = lazy(() => import('@/pages/AgendaDiaPage').then((m) => ({ default: m.AgendaDiaPage })))
+const AgendarPage = lazy(() => import('@/pages/AgendarPage').then((m) => ({ default: m.AgendarPage })))
+const MeusAgendamentosPage = lazy(() => import('@/pages/MeusAgendamentosPage').then((m) => ({ default: m.MeusAgendamentosPage })))
 const AuditoriaPage = lazy(() => import('@/pages/AuditoriaPage').then((m) => ({ default: m.AuditoriaPage })))
 const CaixaSaidaPage = lazy(() => import('@/pages/CaixaSaidaPage').then((m) => ({ default: m.CaixaSaidaPage })))
 const ConfiguracoesPage = lazy(() => import('@/pages/ConfiguracoesPage').then((m) => ({ default: m.ConfiguracoesPage })))
@@ -64,14 +67,9 @@ function AreaAutenticada() {
       <Suspense fallback={<p role="status" className="py-8 text-center text-sm text-texto-3">Carregando…</p>}>
         <Routes>
           <Route index element={<Inicio usuario={usuario} />} />
-          <Route
-            path="agenda"
-            element={<EmConstrucao titulo="Agenda do dia" fase="Fase 2" descricao="Grade por profissional, resumo do dia e painel de detalhes." />}
-          />
-          <Route
-            path="agendar"
-            element={<EmConstrucao titulo="Agendar consulta" fase="Fase 2" descricao="Serviço → profissional → data e horário → confirmação." />}
-          />
+          <Route path="agenda" element={<Exige usuario={usuario} permissoes={['agenda:ler', 'agenda-propria:gerir']}><AgendaDiaPage /></Exige>} />
+          <Route path="agendar" element={<Exige usuario={usuario} permissoes={['agendamento-proprio:gerir']}><AgendarPage /></Exige>} />
+          <Route path="meus-agendamentos" element={<Exige usuario={usuario} permissoes={['agendamento-proprio:gerir']}><MeusAgendamentosPage /></Exige>} />
           <Route
             path="indicadores"
             element={<EmConstrucao titulo="Indicadores" fase="Fase 6" descricao="KPIs, ocupação, origem dos agendamentos e lista de espera." />}
