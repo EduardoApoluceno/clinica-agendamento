@@ -1,0 +1,42 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+# HTTP interno. Em demo é acessado direto em http://localhost:8080 (localhost é contexto seguro);
+# em prod o Caddy compartilhado (borda) termina o TLS e encaminha para cá.
+:8080 {
+	encode zstd gzip
+
+	header {
+		-Server
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		Cross-Origin-Opener-Policy "same-origin"
+	}
+
+	@backend path /api/* /oauth2/* /login /login/* /logout /v3/api-docs /v3/api-docs/* /swagger-ui/* /swagger-ui.html
+	handle @backend {
+		reverse_proxy {$BACKEND_UPSTREAM:backend:8080}
+	}
+
+	handle /actuator/* {
+		respond 404
+	}
+
+	handle {
+		root * /srv
+		header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self' {$KC_URL_PUBLICA:http://localhost:8180}; frame-ancestors 'none'"
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		header /index.html Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}

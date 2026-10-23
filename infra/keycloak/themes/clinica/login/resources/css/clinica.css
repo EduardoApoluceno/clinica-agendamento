@@ -1,0 +1,48 @@
+/* Design tokens da clínica aplicados ao tema PatternFly v5 do Keycloak. */
+:root {
+  --pf-v5-global--FontFamily--text: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --pf-v5-global--FontFamily--heading: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --pf-v5-global--BackgroundColor--100: #ffffff;
+  --pf-v5-global--BackgroundColor--200: #fafafa;
+  --pf-v5-global--BorderColor--100: #e4e4e7;
+  --pf-v5-global--Color--100: #18181b;
+  --pf-v5-global--Color--200: #52525b;
+  --pf-v5-global--primary-color--100: #18181b;
+  --pf-v5-global--primary-color--200: #3f3f46;
+  --pf-v5-global--link--Color: #18181b;
+  --pf-v5-global--link--Color--hover: #3f3f46;
+  --pf-v5-global--BorderRadius--sm: 10px;
+}
+
+body, .pf-v5-c-login {
+  background: #fafafa !important;
+}
+
+.pf-v5-c-login__main {
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.pf-v5-c-button.pf-m-primary {
+  border-radius: 10px;
+  min-height: 44px;
+  transition: background-color 180ms cubic-bezier(.2, .7, .2, 1), transform 150ms ease-out;
+}
+
+.pf-v5-c-button.pf-m-primary:active {
+  transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid #18181b !important;
+  outline-offset: 2px;
+}
+
+h1, .pf-v5-c-title {
+  letter-spacing: -0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

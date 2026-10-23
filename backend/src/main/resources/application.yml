@@ -1,0 +1,141 @@
+# Configuração base. Valores sensíveis vêm SEMPRE de variáveis de ambiente (ver .env.example).
+spring:
+  application:
+    name: clinica
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/clinica}
+    username: ${DB_APP_USER:clinica_app}
+    password: ${DB_APP_PASSWORD:}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:10}
+  flyway:
+    user: ${DB_MIGRATION_USER:${spring.datasource.username}}
+    password: ${DB_MIGRATION_PASSWORD:${spring.datasource.password}}
+    locations: classpath:db/migration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  session:
+    timeout: ${SESSAO_TIMEOUT_INATIVIDADE:30m}
+    redis:
+      namespace: clinica:sessao
+  modulith:
+    events:
+      jdbc:
+        schema-initialization:
+          enabled: false
+      republish-outstanding-events-on-restart: true
+
+server:
+  port: 8080
+  shutdown: graceful
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+    include-message: never
+  servlet:
+    session:
+      timeout: ${SESSAO_TIMEOUT_INATIVIDADE:30m}
+      cookie:
+        name: ${SESSAO_COOKIE_NOME:__Host-SESSION}
+        http-only: true
+        secure: true
+        same-site: strict
+        path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  metrics:
+    tags:
+      application: clinica
+
+db-scheduler:
+  enabled: true
+  threads: 4
+  polling-interval: 10s
+
+springdoc:
+  api-docs:
+    enabled: ${OPENAPI_ATIVO:false}
+  swagger-ui:
+    enabled: ${OPENAPI_ATIVO:false}
+
+app:
+  clinica:
+    fuso-horario: America/Porto_Velho
+  demo:
+    ativo: false
+  auth:
+    modo: OIDC
+    oidc:
+      client-id: ${OIDC_CLIENT_ID:clinica-bff}
+      client-secret: ${OIDC_CLIENT_SECRET:}
+      issuer-publico: ${OIDC_ISSUER_PUBLICO:http://localhost:8180/realms/clinica}
+      issuer-interno: ${OIDC_ISSUER_INTERNO:${OIDC_ISSUER_PUBLICO:http://localhost:8180/realms/clinica}}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: demo
+app:
+  demo:
+    ativo: true
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: demo-leve
+app:
+  demo:
+    ativo: true
+  auth:
+    modo: SIMPLES
+    usuarios-demo:
+      - { usuario: admin, senha: "${DEMO_SENHA:demo}", nome: Administração, papeis: [ADMIN] }
+      - { usuario: recepcao, senha: "${DEMO_SENHA:demo}", nome: Recepção, papeis: [RECEPCAO] }
+      - { usuario: dra.ana, senha: "${DEMO_SENHA:demo}", nome: Dra. Ana Souza, papeis: [PROFISSIONAL] }
+      - { usuario: dr.bruno, senha: "${DEMO_SENHA:demo}", nome: Dr. Bruno Lima, papeis: [PROFISSIONAL] }
+      - { usuario: paciente1, senha: "${DEMO_SENHA:demo}", nome: Carla Mendes, papeis: [PACIENTE] }
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

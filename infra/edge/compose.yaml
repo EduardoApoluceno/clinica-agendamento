@@ -1,0 +1,29 @@
+# Caddy de BORDA compartilhado no VPS (ADR-0009). Não usado localmente.
+# Cada projeto expõe seu serviço "web" numa rede externa; este Caddy termina TLS e roteia por domínio.
+#   docker network create borda
+#   docker compose -f infra/edge/compose.yaml up -d
+name: borda
+
+services:
+  caddy:
+    image: caddy:2.11.7-alpine
+    restart: unless-stopped
+    mem_limit: 96m
+    security_opt: ["no-new-privileges:true"]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [borda]
+
+networks:
+  borda:
+    external: true
+
+volumes:
+  caddy_data: {}
+  caddy_config: {}

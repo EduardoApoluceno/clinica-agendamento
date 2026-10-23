@@ -1,0 +1,22 @@
+# segredos
+.env
+*.env.local
+secrets/
+
+# backend
+backend/target/
+*.iml
+.idea/
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+frontend/src/api/gerado/
+
+# sistema
+.DS_Store
+Thumbs.db
+.vscode/

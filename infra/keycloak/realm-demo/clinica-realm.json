@@ -1,0 +1,138 @@
+{
+  "realm": "clinica",
+  "displayName": "Clínica",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "verifyEmail": true,
+  "resetPasswordAllowed": true,
+  "rememberMe": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 5,
+  "passwordPolicy": "length(10) and maxLength(128) and upperCase(1) and lowerCase(1) and digits(1) and notUsername and notEmail and passwordHistory(3)",
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "accessTokenLifespan": 300,
+  "internationalizationEnabled": true,
+  "supportedLocales": ["pt-BR"],
+  "defaultLocale": "pt-BR",
+  "loginTheme": "clinica",
+  "emailTheme": "keycloak",
+  "eventsEnabled": true,
+  "eventsExpiration": 2592000,
+  "enabledEventTypes": ["LOGIN", "LOGIN_ERROR", "REGISTER", "LOGOUT", "UPDATE_PASSWORD", "UPDATE_TOTP", "REMOVE_TOTP", "SEND_RESET_PASSWORD", "VERIFY_EMAIL"],
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": false,
+  "smtpServer": {
+    "host": "mailpit",
+    "port": "1025",
+    "from": "nao-responda@clinica.local",
+    "fromDisplayName": "Clínica (demonstração)",
+    "ssl": "false",
+    "starttls": "false",
+    "auth": "false"
+  },
+  "roles": {
+    "realm": [
+      { "name": "ADMIN", "description": "Administração da clínica" },
+      { "name": "RECEPCAO", "description": "Recepção" },
+      { "name": "PROFISSIONAL", "description": "Profissional de saúde" },
+      { "name": "PACIENTE", "description": "Paciente" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "clinica-bff",
+      "name": "Clínica — BFF",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${KC_CLIENTE_BFF_SEGREDO}",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "redirectUris": ["${APP_URL_PUBLICA}/login/oauth2/code/keycloak"],
+      "webOrigins": [],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "${APP_URL_PUBLICA}/",
+        "backchannel.logout.session.required": "true"
+      },
+      "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "basic", "email"],
+      "optionalClientScopes": ["offline_access"],
+      "protocolMappers": [
+        {
+          "name": "papeis-no-id-token",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "config": {
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin@clinica.local", "email": "admin@clinica.local", "emailVerified": true, "enabled": true,
+      "firstName": "Administração", "lastName": "Demo",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "recepcao@clinica.local", "email": "recepcao@clinica.local", "emailVerified": true, "enabled": true,
+      "firstName": "Renata", "lastName": "Recepção",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["RECEPCAO"]
+    },
+    {
+      "username": "dra.ana@clinica.local", "email": "dra.ana@clinica.local", "emailVerified": true, "enabled": true,
+      "firstName": "Ana", "lastName": "Souza",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["PROFISSIONAL"]
+    },
+    {
+      "username": "dr.bruno@clinica.local", "email": "dr.bruno@clinica.local", "emailVerified": true, "enabled": true,
+      "firstName": "Bruno", "lastName": "Lima",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["PROFISSIONAL"]
+    },
+    {
+      "username": "carla@exemplo.com", "email": "carla@exemplo.com", "emailVerified": true, "enabled": true,
+      "firstName": "Carla", "lastName": "Mendes",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["PACIENTE"]
+    },
+    {
+      "username": "diego@exemplo.com", "email": "diego@exemplo.com", "emailVerified": true, "enabled": true,
+      "firstName": "Diego", "lastName": "Rocha",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["PACIENTE"]
+    },
+    {
+      "username": "elisa@exemplo.com", "email": "elisa@exemplo.com", "emailVerified": true, "enabled": true,
+      "firstName": "Elisa", "lastName": "Prado",
+      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
+      "realmRoles": ["PACIENTE"]
+    }
+  ]
+}

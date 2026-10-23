@@ -1,0 +1,11 @@
+{
+  "identities": [
+    {
+      "name": "clinica-demo",
+      "credentials": [
+        { "accessKey": "demo-access-key", "secretKey": "demo-secret-key-somente-local" }
+      ],
+      "actions": ["Read:clinica-anexos", "Write:clinica-anexos", "List:clinica-anexos", "Tagging:clinica-anexos"]
+    }
+  ]
+}

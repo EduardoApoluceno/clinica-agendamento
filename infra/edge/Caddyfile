@@ -1,0 +1,31 @@
+{
+	email {$ACME_EMAIL}
+	servers {
+		protocols h1 h2 h3
+	}
+}
+
+(seguranca) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+}
+
+app.suaclinica.com.br {
+	import seguranca
+	reverse_proxy clinica-web-1:8080
+}
+
+auth.suaclinica.com.br {
+	import seguranca
+	# Console administrativo do Keycloak nunca exposto publicamente (acesso via túnel SSH).
+	@admin path /admin /admin/*
+	respond @admin 404
+	reverse_proxy clinica-keycloak-1:8180
+}
+
+# outro-projeto.com.br {
+#	import seguranca
+#	reverse_proxy outro-web-1:8080
+# }

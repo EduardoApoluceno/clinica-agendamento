@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logs JSON (stdout) com correlation-id e mascaramento de dados pessoais (LGPD). -->
+<configuration>
+    <springProperty scope="context" name="app" source="spring.application.name"/>
+
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>correlation_id</includeMdcKeyName>
+            <customFields>{"servico":"${app}"}</customFields>
+            <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                <!-- CPF (com ou sem pontuação) -->
+                <valueMask>
+                    <value>\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b</value>
+                    <mask>***.***.***-**</mask>
+                </valueMask>
+                <!-- e-mail: mantém só o domínio -->
+                <valueMask>
+                    <value>[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})</value>
+                    <mask>***@$1</mask>
+                </valueMask>
+                <!-- telefone BR (+55 DDD 9XXXX-XXXX) -->
+                <valueMask>
+                    <value>(\+?55\s?)?\(?\d{2}\)?\s?9?\d{4}-?\d{4}\b</value>
+                    <mask>(**) *****-****</mask>
+                </valueMask>
+                <path>senha</path>
+                <path>password</path>
+                <path>token</path>
+                <path>cpf</path>
+            </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="JSON"/>
+    </root>
+    <logger name="br.com.clinica" level="INFO"/>
+</configuration>
