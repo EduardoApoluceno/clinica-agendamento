@@ -23,6 +23,11 @@ export function localClinicaParaUtc(valorLocal: string): string {
   return fromZonedTime(valorLocal, FUSO_CLINICA).toISOString()
 }
 
+/** Instante UTC → valor de <input type="datetime-local"> no horário da clínica. */
+export function utcParaLocalClinica(instanteIso: string): string {
+  return formatInTimeZone(instanteIso, FUSO_CLINICA, "yyyy-MM-dd'T'HH:mm")
+}
+
 export function mascararCpf(valor: string): string {
   const d = valor.replace(/\D/g, '').slice(0, 11)
   return d

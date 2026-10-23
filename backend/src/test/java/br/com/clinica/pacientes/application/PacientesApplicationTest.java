@@ -88,6 +88,21 @@ class PacientesApplicationTest {
         }
 
         @Test
+        void naoTrocaCpfParaOutroJaCadastrado() {
+            Paciente outro = Paciente.novo(Fixtures.CLINICA, dados("39053344705"), Paciente.Origem.RECEPCAO,
+                    Optional.empty(), List.of());
+            when(pacientes.buscar(Fixtures.CLINICA, joaoDaRecepcao.id())).thenReturn(Optional.of(joaoDaRecepcao));
+            when(pacientes.buscarPorCpf(eq(Fixtures.CLINICA), eq(Cpf.de("39053344705")))).thenReturn(Optional.of(outro));
+            when(pacientes.buscarPorCpf(eq(Fixtures.CLINICA), eq(Cpf.de("52998224725"))))
+                    .thenReturn(Optional.of(joaoDaRecepcao));
+            when(pacientes.salvar(any())).thenAnswer(i -> i.getArgument(0));
+
+            assertThatThrownBy(() -> caso.atualizar(joaoDaRecepcao.id(), dados("39053344705"), List.of(), 0))
+                    .isInstanceOf(ConflitoException.class);
+            assertThat(caso.atualizar(joaoDaRecepcao.id(), dados("52998224725"), List.of(), 0)).isNotNull();
+        }
+
+        @Test
         void buscaCurtaNaoConsultaRepositorio() {
             assertThat(caso.pesquisar("jo", new Pagina.Pedido(0, 10)).itens()).isEmpty();
             verify(pacientes, never()).pesquisar(any(), anyString(), any());
@@ -137,6 +152,15 @@ class PacientesApplicationTest {
                     .isInstanceOf(ConflitoException.class);
             assertThat(caso.atualizar(dados("52998224725"), 0)).isNotNull();
             assertThatThrownBy(() -> caso.atualizar(dados("52998224725"), 7)).isInstanceOf(ConflitoException.class);
+        }
+
+        @Test
+        void titularNaoTrocaOProprioCpf() {
+            Paciente meu = joaoDaRecepcao.vinculadoA("conta-carla");
+            when(pacientes.buscarPorUsuario(Fixtures.CLINICA, "conta-carla")).thenReturn(Optional.of(meu));
+            assertThatThrownBy(() -> caso.atualizar(dados("39053344705"), 0))
+                    .isInstanceOf(ConflitoException.class).hasMessageContaining("recepção");
+            verify(pacientes, never()).salvar(any());
         }
 
         @Test

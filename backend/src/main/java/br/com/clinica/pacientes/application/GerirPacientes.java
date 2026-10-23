@@ -65,6 +65,7 @@ public class GerirPacientes {
         if (atual.versao() != versao) {
             throw new ConflitoException("edicao-concorrente", "Os dados foram alterados por outra pessoa. Recarregue.");
         }
+        exigirCpfLivre(dados, Optional.of(id));
         Paciente alterado = atual.comDados(dados);
         for (Contato contato : novosContatos) {
             alterado = alterado.comContato(contato);

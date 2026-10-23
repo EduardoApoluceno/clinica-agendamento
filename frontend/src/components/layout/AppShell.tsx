@@ -1,6 +1,9 @@
 import { useState, type ReactNode } from 'react'
 import { NavLink } from 'react-router'
-import { BarChart3, CalendarDays, CalendarPlus, Inbox, LogOut, Menu, X, type LucideIcon } from 'lucide-react'
+import {
+  BarChart3, CalendarClock, CalendarDays, CalendarPlus, ClipboardList, Inbox, LogOut, Menu, Settings, ShieldCheck,
+  Stethoscope, UserRound, Users, X, type LucideIcon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { sair } from '@/lib/api'
 import { cn } from '@/lib/utils'
@@ -10,21 +13,38 @@ interface ItemMenu {
   rota: string
   rotulo: string
   icone: LucideIcon
-  papeis: Papel[]
+  /** Basta uma das permissões (vindas de /api/v1/me). */
+  permissoes?: string[]
+  /** Telas de fases futuras, ainda sem permissão própria no backend. */
+  papeis?: Papel[]
   somenteDemo?: boolean
 }
+
+const GESTAO_EQUIPE = ['profissionais:administrar', 'ausencias:gerir']
 
 export const ITENS_MENU: ItemMenu[] = [
   { rota: '/agenda', rotulo: 'Agenda do dia', icone: CalendarDays, papeis: ['ADMIN', 'RECEPCAO', 'PROFISSIONAL'] },
   { rota: '/agendar', rotulo: 'Agendar consulta', icone: CalendarPlus, papeis: ['PACIENTE', 'RECEPCAO'] },
+  { rota: '/minha-agenda', rotulo: 'Minha agenda', icone: CalendarClock, permissoes: ['agenda-propria:gerir'] },
+  { rota: '/pacientes', rotulo: 'Pacientes', icone: Users, permissoes: ['pacientes:ler'] },
+  { rota: '/profissionais', rotulo: 'Profissionais', icone: Stethoscope, permissoes: GESTAO_EQUIPE },
+  { rota: '/servicos', rotulo: 'Serviços', icone: ClipboardList, permissoes: GESTAO_EQUIPE },
+  { rota: '/meu-cadastro', rotulo: 'Meu cadastro', icone: UserRound, permissoes: ['cadastro-proprio:gerir'] },
   { rota: '/indicadores', rotulo: 'Indicadores', icone: BarChart3, papeis: ['ADMIN'] },
-  { rota: '/caixa-saida', rotulo: 'Caixa de saída', icone: Inbox, papeis: ['ADMIN', 'RECEPCAO'], somenteDemo: true },
+  { rota: '/auditoria', rotulo: 'Auditoria', icone: ShieldCheck, permissoes: ['auditoria:ler'] },
+  { rota: '/configuracoes', rotulo: 'Configurações', icone: Settings, permissoes: ['clinica:administrar'] },
+  { rota: '/caixa-saida', rotulo: 'Caixa de saída', icone: Inbox, permissoes: ['caixa-saida:ler'], somenteDemo: true },
 ]
 
+export function itemVisivel(item: ItemMenu, usuario: UsuarioAtual) {
+  const permitido =
+    (item.permissoes?.some((p) => usuario.permissoes?.includes(p)) ?? false) ||
+    (item.papeis?.some((p) => usuario.papeis.includes(p)) ?? false)
+  return permitido && (!item.somenteDemo || usuario.ambienteDemo)
+}
+
 export function itensVisiveis(usuario: UsuarioAtual) {
-  return ITENS_MENU.filter(
-    (item) => item.papeis.some((p) => usuario.papeis.includes(p)) && (!item.somenteDemo || usuario.ambienteDemo),
-  )
+  return ITENS_MENU.filter((item) => itemVisivel(item, usuario))
 }
 
 export function AppShell({ usuario, children }: { usuario: UsuarioAtual; children: ReactNode }) {

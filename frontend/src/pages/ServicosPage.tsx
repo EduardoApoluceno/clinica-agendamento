@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Pencil, Plus } from 'lucide-react'
@@ -21,6 +21,7 @@ import { ServicosCadastrarBody } from '@/api/gerado/zod/servicos/servicos.zod'
 import type { ServicoResposta } from '@/api/gerado/modelos'
 import { usePermissao } from '@/features/sessao/useUsuarioAtual'
 import { formatarMoeda, mensagemErro } from '@/lib/formatos'
+import { corpoLimpo, NUMERO_OPCIONAL, textoObrigatorio } from '@/lib/formulario'
 
 const POLITICAS = { NENHUM: 'Sem cobrança antecipada', SINAL: 'Sinal', INTEGRAL: 'Pagamento integral' } as const
 
@@ -53,9 +54,9 @@ export function ServicosPage() {
               <tr key={s.id}>
                 <Td className="font-medium">{s.nome}</Td>
                 <Td className="numeros-tabulares">{s.duracaoMinutos} min</Td>
-                <Td className="numeros-tabulares">{formatarMoeda(s.precoCentavos)}</Td>
+                <Td className="numeros-tabulares">{formatarMoeda(s.precoCentavos ?? 0)}</Td>
                 <Td>
-                  {POLITICAS[s.politicaPagamento]}
+                  {s.politicaPagamento && POLITICAS[s.politicaPagamento]}
                   {s.valorSinalCentavos != null && <span className="numeros-tabulares"> ({formatarMoeda(s.valorSinalCentavos)})</span>}
                 </Td>
                 <Td><Selo variante={s.ativo ? 'contorno' : 'tracejado'}>{s.ativo ? 'Ativo' : 'Inativo'}</Selo></Td>
@@ -76,7 +77,13 @@ export function ServicosPage() {
   )
 }
 
-type DadosServico = z.infer<typeof ServicosCadastrarBody>
+const SchemaServico = ServicosCadastrarBody.extend({
+  nome: textoObrigatorio(120, 'Informe o nome do serviço.'),
+}).refine((s) => s.politicaPagamento !== 'SINAL' || s.valorSinalCentavos != null, {
+  message: 'Informe o valor do sinal.',
+  path: ['valorSinalCentavos'],
+})
+type DadosServico = z.infer<typeof SchemaServico>
 
 function FormServico({ servico, aoConcluir }: { servico: ServicoResposta | null; aoConcluir: () => void }) {
   const toast = useToast()
@@ -84,12 +91,21 @@ function FormServico({ servico, aoConcluir }: { servico: ServicoResposta | null;
   const cadastrar = useServicosCadastrar()
   const atualizar = useServicosAtualizar()
   const form = useForm<DadosServico>({
-    resolver: zodResolver(ServicosCadastrarBody),
+    resolver: zodResolver(SchemaServico),
     defaultValues: servico
-      ? { ...servico, descricao: servico.descricao ?? '', instrucoesPreparo: servico.instrucoesPreparo ?? '', valorSinalCentavos: servico.valorSinalCentavos ?? undefined }
+      ? {
+          nome: servico.nome ?? '',
+          duracaoMinutos: servico.duracaoMinutos ?? 30,
+          precoCentavos: servico.precoCentavos ?? 0,
+          politicaPagamento: servico.politicaPagamento ?? 'NENHUM',
+          valorSinalCentavos: servico.valorSinalCentavos,
+          descricao: servico.descricao ?? '',
+          instrucoesPreparo: servico.instrucoesPreparo ?? '',
+          ativo: servico.ativo ?? true,
+        }
       : { nome: '', duracaoMinutos: 30, precoCentavos: 0, politicaPagamento: 'NENHUM', ativo: true },
   })
-  const politica = form.watch('politicaPagamento')
+  const politica = useWatch({ control: form.control, name: 'politicaPagamento' })
   const { errors } = form.formState
   const numero = { valueAsNumber: true } as const
 
@@ -99,9 +115,9 @@ function FormServico({ servico, aoConcluir }: { servico: ServicoResposta | null;
     aoConcluir()
   }
   const salvar = form.handleSubmit((dados) => {
-    const corpo = { ...dados, valorSinalCentavos: dados.politicaPagamento === 'SINAL' ? dados.valorSinalCentavos : undefined }
-    if (servico) {
-      atualizar.mutate({ id: servico.id, data: { ...corpo, versao: servico.versao } },
+    const corpo = corpoLimpo({ ...dados, valorSinalCentavos: dados.politicaPagamento === 'SINAL' ? dados.valorSinalCentavos : undefined })
+    if (servico?.id) {
+      atualizar.mutate({ id: servico.id, data: { ...corpo, versao: servico.versao ?? 0 } },
         { onSuccess: () => concluir('Serviço atualizado.'), onError: (e) => toast.erro(mensagemErro(e)) })
     } else {
       cadastrar.mutate({ data: corpo }, { onSuccess: () => concluir('Serviço cadastrado.'), onError: (e) => toast.erro(mensagemErro(e)) })
@@ -130,7 +146,7 @@ function FormServico({ servico, aoConcluir }: { servico: ServicoResposta | null;
         </Campo>
         {politica === 'SINAL' && (
           <Campo rotulo="Valor do sinal (centavos)" obrigatorio erro={errors.valorSinalCentavos?.message} className="sm:col-span-3">
-            {(p) => <Input {...p} type="number" min={1} className="numeros-tabulares" {...form.register('valorSinalCentavos', numero)} />}
+            {(p) => <Input {...p} type="number" min={1} className="numeros-tabulares" {...form.register('valorSinalCentavos', NUMERO_OPCIONAL)} />}
           </Campo>
         )}
         <Campo rotulo="Descrição" erro={errors.descricao?.message} className="sm:col-span-3">

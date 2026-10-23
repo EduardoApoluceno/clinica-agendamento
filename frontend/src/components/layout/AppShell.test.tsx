@@ -5,16 +5,45 @@ import { describe, expect, it } from 'vitest'
 import type { UsuarioAtual } from '@/features/sessao/useUsuarioAtual'
 import { AppShell, itensVisiveis } from './AppShell'
 
-const recepcao: UsuarioAtual = { id: '1', nome: 'Renata Recepção', papeis: ['RECEPCAO'], ambienteDemo: true }
-const paciente: UsuarioAtual = { id: '2', nome: 'Carla Mendes', papeis: ['PACIENTE'], ambienteDemo: false }
+const recepcao: UsuarioAtual = {
+  id: '1',
+  nome: 'Renata Recepção',
+  papeis: ['RECEPCAO'],
+  permissoes: ['clinica:ler', 'profissionais:ler', 'ausencias:gerir', 'pacientes:ler', 'pacientes:escrever', 'caixa-saida:ler'],
+  ambienteDemo: true,
+}
+const paciente: UsuarioAtual = {
+  id: '2',
+  nome: 'Carla Mendes',
+  papeis: ['PACIENTE'],
+  permissoes: ['cadastro-proprio:gerir'],
+  ambienteDemo: false,
+}
+const profissional: UsuarioAtual = {
+  id: '3',
+  nome: 'Dra. Ana Lima',
+  papeis: ['PROFISSIONAL'],
+  permissoes: ['clinica:ler', 'profissionais:ler', 'agenda-propria:gerir', 'pacientes:ler'],
+  ambienteDemo: false,
+}
 
 describe('itensVisiveis', () => {
-  it('mostra à recepção agenda, agendamento e caixa de saída (demo)', () => {
-    expect(itensVisiveis(recepcao).map((i) => i.rota)).toEqual(['/agenda', '/agendar', '/caixa-saida'])
+  it('mostra à recepção pacientes, equipe e a caixa de saída (demo)', () => {
+    expect(itensVisiveis(recepcao).map((i) => i.rota)).toEqual([
+      '/agenda', '/agendar', '/pacientes', '/profissionais', '/servicos', '/caixa-saida',
+    ])
   })
 
-  it('mostra ao paciente apenas o agendamento', () => {
-    expect(itensVisiveis(paciente).map((i) => i.rota)).toEqual(['/agendar'])
+  it('esconde a caixa de saída fora da demonstração', () => {
+    expect(itensVisiveis({ ...recepcao, ambienteDemo: false }).map((i) => i.rota)).not.toContain('/caixa-saida')
+  })
+
+  it('mostra ao paciente o agendamento e o próprio cadastro', () => {
+    expect(itensVisiveis(paciente).map((i) => i.rota)).toEqual(['/agendar', '/meu-cadastro'])
+  })
+
+  it('mostra ao profissional a própria agenda, sem gestão da equipe', () => {
+    expect(itensVisiveis(profissional).map((i) => i.rota)).toEqual(['/agenda', '/minha-agenda', '/pacientes'])
   })
 })
 

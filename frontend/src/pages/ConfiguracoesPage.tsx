@@ -17,6 +17,7 @@ import { ClinicaAtualizarBody } from '@/api/gerado/zod/clinica/clinica.zod'
 import { ConfiguracaoAtualizarBody } from '@/api/gerado/zod/configuracao/configuracao.zod'
 import type { ClinicaResposta, ConfiguracaoDto } from '@/api/gerado/modelos'
 import { mensagemErro } from '@/lib/formatos'
+import { corpoLimpo } from '@/lib/formulario'
 
 export function ConfiguracoesPage() {
   const clinica = useClinicaObter()
@@ -45,7 +46,7 @@ function FormDadosClinica({ clinica }: { clinica: ClinicaResposta }) {
 
   const salvar = form.handleSubmit((dados) =>
     atualizar.mutate(
-      { data: dados },
+      { data: corpoLimpo(dados) },
       {
         onSuccess: (salva) => {
           queryClient.setQueryData(getClinicaObterQueryKey(), salva)
@@ -101,12 +102,21 @@ function FormDadosClinica({ clinica }: { clinica: ClinicaResposta }) {
 }
 
 function paraFormulario(c: ClinicaResposta): DadosClinica {
+  const e = c.endereco
   return {
-    nome: c.nome,
-    cnpj: c.cnpj,
+    nome: c.nome ?? '',
+    cnpj: c.cnpj ?? '',
     telefone: c.telefone ?? '',
-    versao: c.versao,
-    endereco: { ...c.endereco, complemento: c.endereco.complemento ?? '' },
+    versao: c.versao ?? 0,
+    endereco: {
+      logradouro: e?.logradouro ?? '',
+      numero: e?.numero ?? '',
+      complemento: e?.complemento ?? '',
+      bairro: e?.bairro ?? '',
+      cidade: e?.cidade ?? '',
+      uf: e?.uf ?? '',
+      cep: e?.cep ?? '',
+    },
   }
 }
 

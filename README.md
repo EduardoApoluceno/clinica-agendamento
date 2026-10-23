@@ -75,7 +75,13 @@ cd backend && mvn verify            # testes unitários, ArchUnit, Modulith, Tes
 cd frontend && npm ci && npm run dev   # http://localhost:5173 (proxy para o compose em :8080)
 npm test && npm run lint && npm run typecheck
 npm run api:gerar                       # gera cliente TanStack Query + Zod via Orval (compose de pé)
+
+# ponta a ponta (Playwright) contra o perfil demo; cria contas e cadastra TOTP do dr.bruno
+npx playwright install chromium && npm run e2e
 ```
+
+Rode o E2E num banco descartável (`docker compose --profile demo down -v` antes): o teste de MFA espera
+que o `dr.bruno@clinica.local` ainda não tenha TOTP. No CI, o job **E2E Playwright** sobe a stack do zero.
 
 Os testes de integração do backend usam Testcontainers, então o Docker precisa estar em execução.
 

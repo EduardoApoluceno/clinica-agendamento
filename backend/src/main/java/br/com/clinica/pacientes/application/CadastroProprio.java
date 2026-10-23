@@ -80,6 +80,10 @@ public class CadastroProprio {
         if (atual.versao() != versao) {
             throw new ConflitoException("edicao-concorrente", "Seus dados foram alterados em outra sessão. Recarregue.");
         }
+        // Trocar o próprio CPF permitiria ocupar o CPF de outra pessoa antes dela (ADR-0016).
+        if (!atual.dados().cpf().equals(dados.cpf())) {
+            throw new ConflitoException("cpf-imutavel", "Para corrigir o CPF, procure a recepção.");
+        }
         Paciente salvo = pacientes.salvar(atual.comDados(dados));
         auditoria.registrar(EventoAuditoria.de("CADASTRO_PROPRIO_ATUALIZADO", GerirPacientes.RECURSO, salvo.id())
                 .doPaciente(salvo.id()));
