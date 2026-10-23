@@ -1,0 +1,2361 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Clínica — API",
+    "description": "API do BFF. Autenticação por cookie de sessão; mutações exigem X-XSRF-TOKEN.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/api/v1/servicos/{id}": {
+      "put": {
+        "tags": [
+          "servicos"
+        ],
+        "operationId": "servicosAtualizar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicoRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServicoResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais/{id}": {
+      "get": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisObter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfissionalResposta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisAtualizar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfissionalRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfissionalResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais/{id}/expediente": {
+      "get": {
+        "tags": [
+          "agendaProfissional"
+        ],
+        "operationId": "agendaProfissionalExpediente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FaixaDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "agendaProfissional"
+        ],
+        "operationId": "agendaProfissionalDefinirExpediente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FaixaDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FaixaDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pacientes/{id}": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "operationId": "pacientesObter",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pacientes"
+        ],
+        "operationId": "pacientesAtualizar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PacienteRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/paciente": {
+      "get": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroMeu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroAtualizar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroCompletar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompletarRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clinica": {
+      "get": {
+        "tags": [
+          "clinica"
+        ],
+        "operationId": "clinicaObter",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClinicaResposta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "clinica"
+        ],
+        "operationId": "clinicaAtualizar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClinicaRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClinicaResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clinica/configuracoes": {
+      "get": {
+        "tags": [
+          "configuracao"
+        ],
+        "operationId": "configuracaoObter",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguracaoDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "configuracao"
+        ],
+        "operationId": "configuracaoAtualizar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfiguracaoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguracaoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/servicos": {
+      "get": {
+        "tags": [
+          "servicos"
+        ],
+        "operationId": "servicosListar",
+        "parameters": [
+          {
+            "name": "incluirInativos",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServicoResposta"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "servicos"
+        ],
+        "operationId": "servicosCadastrar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicoRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServicoResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais": {
+      "get": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisListar",
+        "parameters": [
+          {
+            "name": "incluirInativos",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfissionalResposta"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisCadastrar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfissionalRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfissionalResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais/{id}/ausencias": {
+      "get": {
+        "tags": [
+          "agendaProfissional"
+        ],
+        "operationId": "agendaProfissionalAusencias",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "de",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AusenciaDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "agendaProfissional"
+        ],
+        "operationId": "agendaProfissionalRegistrarAusencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AusenciaRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AusenciaDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pacientes": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "operationId": "pacientesPesquisar",
+        "parameters": [
+          {
+            "name": "termo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "tamanho",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginaResumoPaciente"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pacientes"
+        ],
+        "operationId": "pacientesCadastrar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PacienteRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/telefone/verificacao": {
+      "post": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroConfirmarCodigo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmarCodigoRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PacienteResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/telefone/codigo": {
+      "post": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroSolicitarCodigo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitarCodigoRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodigoEnviado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/consentimentos": {
+      "get": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroConsentimentos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConsentimentoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroConceder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConcederRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/especialidades": {
+      "get": {
+        "tags": [
+          "servicos"
+        ],
+        "operationId": "servicosEspecialidades",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Especialidade"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "servicos"
+        ],
+        "operationId": "servicosCriarEspecialidade",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EspecialidadeRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Especialidade"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais/{id}/ativo": {
+      "patch": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisAlterarAtivo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtivoRequisicao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfissionalResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/servicos": {
+      "get": {
+        "tags": [
+          "catalogoPublico"
+        ],
+        "operationId": "catalogoPublicoServicos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServicoPublico"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/profissionais": {
+      "get": {
+        "tags": [
+          "catalogoPublico"
+        ],
+        "operationId": "catalogoPublicoProfissionais",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfissionalPublico"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/clinica": {
+      "get": {
+        "tags": [
+          "clinicaPublica"
+        ],
+        "operationId": "clinicaPublicaObter",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClinicaPublica"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publico/ambiente": {
+      "get": {
+        "tags": [
+          "ambiente"
+        ],
+        "operationId": "ambienteAmbiente",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AmbienteResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pacientes/{id}/consentimentos": {
+      "get": {
+        "tags": [
+          "pacientes"
+        ],
+        "operationId": "pacientesConsentimentos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConsentimentoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "usuarioAtual"
+        ],
+        "operationId": "usuarioAtualAtual",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioAtualResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/profissional": {
+      "get": {
+        "tags": [
+          "profissionais"
+        ],
+        "operationId": "profissionaisMeu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfissionalResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/exportacao-dados": {
+      "get": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroExportar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportacaoResposta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo/caixa-saida": {
+      "get": {
+        "tags": [
+          "caixaSaida"
+        ],
+        "operationId": "caixaSaidaListar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MensagemSaida"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auditoria": {
+      "get": {
+        "tags": [
+          "auditoria"
+        ],
+        "operationId": "auditoriaBuscar",
+        "parameters": [
+          {
+            "name": "recursoTipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recursoId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pacienteId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "de",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tamanho",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginaRegistroAuditoria"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profissionais/{id}/ausencias/{ausenciaId}": {
+      "delete": {
+        "tags": [
+          "agendaProfissional"
+        ],
+        "operationId": "agendaProfissionalRemoverAusencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ausenciaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me/consentimentos/{finalidade}": {
+      "delete": {
+        "tags": [
+          "meuCadastro"
+        ],
+        "operationId": "meuCadastroRevogar",
+        "parameters": [
+          {
+            "name": "finalidade",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "TRATAMENTO_SAUDE",
+                "LEMBRETES_WHATSAPP",
+                "LEMBRETES_EMAIL",
+                "LEMBRETES_SMS",
+                "PESQUISA_SATISFACAO",
+                "COMUNICACOES_CLINICA"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ServicoRequisicao": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "descricao": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "instrucoesPreparo": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          },
+          "duracaoMinutos": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 480,
+            "minimum": 5
+          },
+          "precoCentavos": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 100000000,
+            "minimum": 0
+          },
+          "politicaPagamento": {
+            "type": "string",
+            "enum": [
+              "NENHUM",
+              "SINAL",
+              "INTEGRAL"
+            ]
+          },
+          "valorSinalCentavos": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "duracaoMinutos",
+          "nome",
+          "politicaPagamento",
+          "precoCentavos"
+        ]
+      },
+      "ServicoResposta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "instrucoesPreparo": {
+            "type": "string"
+          },
+          "duracaoMinutos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "precoCentavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "politicaPagamento": {
+            "type": "string",
+            "enum": [
+              "NENHUM",
+              "SINAL",
+              "INTEGRAL"
+            ]
+          },
+          "valorSinalCentavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ProfissionalRequisicao": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          },
+          "conselho": {
+            "type": "string",
+            "minLength": 1
+          },
+          "numeroConselho": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "ufConselho": {
+            "type": "string",
+            "minLength": 1
+          },
+          "usuarioSub": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 0
+          },
+          "especialidades": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "servicos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "conselho",
+          "nome",
+          "numeroConselho",
+          "ufConselho"
+        ]
+      },
+      "ProfissionalResposta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "conselho": {
+            "type": "string"
+          },
+          "numeroConselho": {
+            "type": "string"
+          },
+          "ufConselho": {
+            "type": "string"
+          },
+          "usuarioSub": {
+            "type": "string"
+          },
+          "especialidades": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "servicos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "FaixaDto": {
+        "type": "object",
+        "properties": {
+          "dia": {
+            "type": "string",
+            "enum": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          },
+          "inicio": {
+            "type": "string",
+            "format": "time-local"
+          },
+          "fim": {
+            "type": "string",
+            "format": "time-local"
+          }
+        },
+        "required": [
+          "dia",
+          "fim",
+          "inicio"
+        ]
+      },
+      "ContatoDto": {
+        "type": "object",
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "EMAIL",
+              "CELULAR"
+            ]
+          },
+          "valor": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 0
+          },
+          "principal": {
+            "type": "boolean"
+          },
+          "verificadoEm": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "tipo",
+          "valor"
+        ]
+      },
+      "DadosPessoaisDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          },
+          "nomeSocial": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "cpf": {
+            "type": "string",
+            "maxLength": 14,
+            "minLength": 0
+          },
+          "sexo": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "canalPreferido": {
+            "type": "string",
+            "enum": [
+              "WHATSAPP",
+              "EMAIL",
+              "SMS"
+            ]
+          }
+        },
+        "required": [
+          "canalPreferido",
+          "cpf",
+          "dataNascimento",
+          "nome"
+        ]
+      },
+      "PacienteRequisicao": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/DadosPessoaisDto"
+          },
+          "contatos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContatoDto"
+            },
+            "maxItems": 6,
+            "minItems": 0
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "dados"
+        ]
+      },
+      "PacienteResposta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nomeSocial": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "sexo": {
+            "type": "string"
+          },
+          "canalPreferido": {
+            "type": "string",
+            "enum": [
+              "WHATSAPP",
+              "EMAIL",
+              "SMS"
+            ]
+          },
+          "origem": {
+            "type": "string",
+            "enum": [
+              "PORTAL",
+              "WHATSAPP",
+              "RECEPCAO"
+            ]
+          },
+          "possuiConta": {
+            "type": "boolean"
+          },
+          "contatos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContatoDto"
+            }
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "AtualizarRequisicao": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/DadosPessoaisDto"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "dados",
+          "versao"
+        ]
+      },
+      "ClinicaRequisicao": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          },
+          "cnpj": {
+            "type": "string",
+            "minLength": 1
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/EnderecoDto"
+          },
+          "telefone": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "cnpj",
+          "endereco",
+          "nome",
+          "versao"
+        ]
+      },
+      "EnderecoDto": {
+        "type": "object",
+        "properties": {
+          "logradouro": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          },
+          "numero": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "complemento": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 0
+          },
+          "bairro": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 0
+          },
+          "cidade": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 0
+          },
+          "uf": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[A-Z]{2}"
+          },
+          "cep": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\d{5}-?\\d{3}"
+          }
+        },
+        "required": [
+          "bairro",
+          "cep",
+          "cidade",
+          "logradouro",
+          "numero",
+          "uf"
+        ]
+      },
+      "ClinicaResposta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "fusoHorario": {
+            "type": "string"
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/EnderecoDto"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ConfiguracaoDto": {
+        "type": "object",
+        "properties": {
+          "antecedenciaMinimaCancelamentoMinutos": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 10080,
+            "minimum": 0
+          },
+          "antecedenciaMinimaAgendamentoMinutos": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 10080,
+            "minimum": 0
+          },
+          "horizonteAgendamentoDias": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 365,
+            "minimum": 1
+          },
+          "minutosHoldPagamento": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 60,
+            "minimum": 5
+          },
+          "lembretesMinutos": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 10080,
+              "minimum": 1
+            },
+            "maxItems": 5,
+            "minItems": 0
+          },
+          "prazoAceiteListaEsperaMinutos": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 1440,
+            "minimum": 5
+          },
+          "smsFallbackAtivo": {
+            "type": "boolean"
+          },
+          "exigeJustificativaProntuarioSemVinculo": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "antecedenciaMinimaAgendamentoMinutos",
+          "antecedenciaMinimaCancelamentoMinutos",
+          "exigeJustificativaProntuarioSemVinculo",
+          "horizonteAgendamentoDias",
+          "lembretesMinutos",
+          "minutosHoldPagamento",
+          "prazoAceiteListaEsperaMinutos",
+          "smsFallbackAtivo",
+          "versao"
+        ]
+      },
+      "AusenciaRequisicao": {
+        "type": "object",
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "FERIAS",
+              "BLOQUEIO",
+              "EXTERNO_GOOGLE"
+            ]
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "fim",
+          "inicio",
+          "tipo"
+        ]
+      },
+      "AusenciaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "FERIAS",
+              "BLOQUEIO",
+              "EXTERNO_GOOGLE"
+            ]
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fim": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfirmarCodigoRequisicao": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\d{6}"
+          }
+        },
+        "required": [
+          "codigo"
+        ]
+      },
+      "SolicitarCodigoRequisicao": {
+        "type": "object",
+        "properties": {
+          "celular": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "celular"
+        ]
+      },
+      "CodigoEnviado": {
+        "type": "object",
+        "properties": {
+          "destinoMascarado": {
+            "type": "string"
+          },
+          "expiraEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "codigoDemo": {
+            "type": "string"
+          }
+        }
+      },
+      "CompletarRequisicao": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/DadosPessoaisDto"
+          },
+          "celular": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "celular",
+          "dados"
+        ]
+      },
+      "ConcederRequisicao": {
+        "type": "object",
+        "properties": {
+          "finalidade": {
+            "type": "string",
+            "enum": [
+              "TRATAMENTO_SAUDE",
+              "LEMBRETES_WHATSAPP",
+              "LEMBRETES_EMAIL",
+              "LEMBRETES_SMS",
+              "PESQUISA_SATISFACAO",
+              "COMUNICACOES_CLINICA"
+            ]
+          },
+          "versaoTermo": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "finalidade",
+          "versaoTermo"
+        ]
+      },
+      "EspecialidadeRequisicao": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "nome"
+        ]
+      },
+      "Especialidade": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "AtivoRequisicao": {
+        "type": "object",
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "versao": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "ativo",
+          "versao"
+        ]
+      },
+      "ServicoPublico": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "instrucoesPreparo": {
+            "type": "string"
+          },
+          "duracaoMinutos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "precoCentavos": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "politicaPagamento": {
+            "type": "string",
+            "enum": [
+              "NENHUM",
+              "SINAL",
+              "INTEGRAL"
+            ]
+          },
+          "valorAntecipadoCentavos": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ProfissionalPublico": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "registro": {
+            "type": "string"
+          },
+          "especialidades": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "servicos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "ClinicaPublica": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "endereco": {
+            "$ref": "#/components/schemas/EnderecoDto"
+          },
+          "telefone": {
+            "type": "string"
+          }
+        }
+      },
+      "AmbienteResposta": {
+        "type": "object",
+        "properties": {
+          "demo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PaginaResumoPaciente": {
+        "type": "object",
+        "properties": {
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResumoPaciente"
+            }
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tamanho": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ResumoPaciente": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nomeSocial": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "cpfMascarado": {
+            "type": "string"
+          },
+          "possuiConta": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ConsentimentoDto": {
+        "type": "object",
+        "properties": {
+          "finalidade": {
+            "type": "string",
+            "enum": [
+              "TRATAMENTO_SAUDE",
+              "LEMBRETES_WHATSAPP",
+              "LEMBRETES_EMAIL",
+              "LEMBRETES_SMS",
+              "PESQUISA_SATISFACAO",
+              "COMUNICACOES_CLINICA"
+            ]
+          },
+          "versaoTermo": {
+            "type": "string"
+          },
+          "concedidoEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revogadoEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vigente": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UsuarioAtualResposta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "papeis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "permissoes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "ambienteDemo": {
+            "type": "boolean"
+          },
+          "equipe": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ExportacaoResposta": {
+        "type": "object",
+        "properties": {
+          "cadastro": {
+            "$ref": "#/components/schemas/PacienteResposta"
+          },
+          "consentimentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConsentimentoDto"
+            }
+          },
+          "geradoEm": {
+            "type": "string"
+          }
+        }
+      },
+      "MensagemSaida": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "canal": {
+            "type": "string"
+          },
+          "destino": {
+            "type": "string"
+          },
+          "conteudo": {
+            "type": "string"
+          },
+          "criadoEm": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PaginaRegistroAuditoria": {
+        "type": "object",
+        "properties": {
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistroAuditoria"
+            }
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tamanho": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RegistroAuditoria": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ocorridoEm": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "atorSub": {
+            "type": "string"
+          },
+          "atorPapel": {
+            "type": "string"
+          },
+          "acao": {
+            "type": "string"
+          },
+          "recursoTipo": {
+            "type": "string"
+          },
+          "recursoId": {
+            "type": "string"
+          },
+          "pacienteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "detalhes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

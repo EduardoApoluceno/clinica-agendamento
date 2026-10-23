@@ -1,5 +1,8 @@
 package br.com.clinica;
 
+import br.com.clinica.auditoria.EventoAuditoria;
+import br.com.clinica.auditoria.RegistradorAuditoria;
+import br.com.clinica.auditoria.application.VerificarCadeiaAuditoria;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -10,8 +13,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.endsWith;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
@@ -20,8 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = "app.auth.oidc.client-secret=teste")
+@SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Import(InfraestruturaContainers.class)
 class AplicacaoIntegracaoTest {
 
@@ -30,6 +37,15 @@ class AplicacaoIntegracaoTest {
 
     @Autowired
     JdbcTemplate jdbc;
+
+    @Autowired
+    RegistradorAuditoria auditoria;
+
+    @Autowired
+    VerificarCadeiaAuditoria verificarCadeia;
+
+    @Autowired
+    TransactionTemplate transacao;
 
     @Test
     void healthEstaPublico() throws Exception {
@@ -49,7 +65,7 @@ class AplicacaoIntegracaoTest {
     }
 
     @Test
-    void meDevolvePapeisDaSessao() throws Exception {
+    void meDevolvePapeisEPermissoesDaSessao() throws Exception {
         mvc.perform(get("/api/v1/me").with(oidcLogin()
                         .idToken(t -> t.subject("u-123").claims(c -> c.putAll(Map.of(
                                 "name", "Recepção Demo", "roles", List.of("recepcao")))))
@@ -57,7 +73,8 @@ class AplicacaoIntegracaoTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("u-123"))
                 .andExpect(jsonPath("$.nome").value("Recepção Demo"))
-                .andExpect(jsonPath("$.papeis[0]").value("RECEPCAO"));
+                .andExpect(jsonPath("$.papeis[0]").value("RECEPCAO"))
+                .andExpect(jsonPath("$.equipe").value(true));
     }
 
     @Test
@@ -70,10 +87,12 @@ class AplicacaoIntegracaoTest {
     }
 
     @Test
-    void trilhaDeAuditoriaEhSomenteInsercao() {
-        jdbc.update("""
-                INSERT INTO evento_auditoria (acao, recurso_tipo, hash) VALUES ('TESTE', 'TESTE', '\\x00')
-                """);
+    void trilhaDeAuditoriaEhEncadeadaESomenteInsercao() {
+        transacao.executeWithoutResult(s -> {
+            auditoria.registrar(EventoAuditoria.de("TESTE_A", "TESTE", 1));
+            auditoria.registrar(EventoAuditoria.de("TESTE_B", "TESTE", 2).com(Map.of("chave", "valor \"aspas\"")));
+        });
+        assertThat(verificarCadeia.executar()).isEmpty();
 
         assertThatThrownBy(() -> jdbc.update("UPDATE evento_auditoria SET acao = 'ADULTERADO'"))
                 .hasMessageContaining("somente-inserção");

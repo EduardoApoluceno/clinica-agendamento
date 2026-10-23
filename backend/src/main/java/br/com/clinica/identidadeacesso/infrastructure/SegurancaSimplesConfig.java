@@ -1,13 +1,12 @@
 package br.com.clinica.identidadeacesso.infrastructure;
 
-import br.com.clinica.identidadeacesso.domain.Papel;
+import br.com.clinica.compartilhado.domain.Papel;
 import java.util.Optional;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,14 +44,9 @@ class SegurancaSimplesConfig {
     @Bean
     InMemoryUserDetailsManager usuariosDemo(AutenticacaoProperties props, PasswordEncoder encoder) {
         var usuarios = props.usuariosDemo().stream()
-                .map(u -> User.withUsername(u.usuario())
-                        .password(encoder.encode(u.senha()))
-                        .authorities(u.papeis().stream()
-                                .map(Papel::doNome)
-                                .flatMap(Optional::stream)
-                                .map(Papel::autoridade)
-                                .toArray(String[]::new))
-                        .build())
+                .map(u -> new UsuarioDemo(u.usuario(), encoder.encode(u.senha()), u.nome(),
+                        AutoridadesDosPapeis.de(Papel.efetivos(u.papeis().stream()
+                                .map(Papel::doNome).flatMap(Optional::stream).toList()))))
                 .toArray(UserDetails[]::new);
         return new InMemoryUserDetailsManager(usuarios);
     }

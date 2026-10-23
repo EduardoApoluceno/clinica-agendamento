@@ -1,0 +1,9 @@
+# Perfil de testes de integração (ativado por @ActiveProfiles("test")). Chaves exclusivas de teste.
+app:
+  auth:
+    oidc:
+      client-secret: teste
+  criptografia:
+    chaves:
+      k1: CcsE6v4KtIYoMn91+BaiPAoaMPVc+DCpXwdu/qP4X58=
+    chave-hmac: Mv/gS4HkTkyVmobp+OEvobuiqozmA02knQ844Srk/74=

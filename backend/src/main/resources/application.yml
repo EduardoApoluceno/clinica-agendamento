@@ -82,9 +82,16 @@ springdoc:
 
 app:
   clinica:
+    id: ${APP_CLINICA_ID:00000000-0000-0000-0000-000000000001}
+    nome-inicial: ${APP_CLINICA_NOME:Clínica}
     fuso-horario: America/Porto_Velho
   demo:
     ativo: false
+  criptografia:
+    chave-ativa: ${APP_CRIPTO_CHAVE_ATIVA:k1}
+    chaves:
+      k1: ${APP_CRIPTO_CHAVE_K1:}
+    chave-hmac: ${APP_CRIPTO_CHAVE_HMAC:}
   auth:
     modo: OIDC
     oidc:
@@ -101,6 +108,11 @@ spring:
 app:
   demo:
     ativo: true
+    expor-codigos: true
+  criptografia:
+    chaves:
+      k1: ${APP_CRIPTO_CHAVE_K1:23zDWKrsjR+k4rhJxTnGS97I1mA80NWbWYQveTp5q2U=}
+    chave-hmac: ${APP_CRIPTO_CHAVE_HMAC:ifIwRpmxDA4i6yI80V0vDW5Gcf1YtOwBH4hiRo03Rkg=}
 springdoc:
   api-docs:
     enabled: true
@@ -115,6 +127,11 @@ spring:
 app:
   demo:
     ativo: true
+    expor-codigos: true
+  criptografia:
+    chaves:
+      k1: ${APP_CRIPTO_CHAVE_K1:23zDWKrsjR+k4rhJxTnGS97I1mA80NWbWYQveTp5q2U=}
+    chave-hmac: ${APP_CRIPTO_CHAVE_HMAC:ifIwRpmxDA4i6yI80V0vDW5Gcf1YtOwBH4hiRo03Rkg=}
   auth:
     modo: SIMPLES
     usuarios-demo:

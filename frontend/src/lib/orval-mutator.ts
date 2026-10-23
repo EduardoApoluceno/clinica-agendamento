@@ -4,3 +4,5 @@ import { api } from './api'
 export function chamarApi<T>(url: string, init?: RequestInit): Promise<T> {
   return api<T>(url, init)
 }
+
+export default chamarApi

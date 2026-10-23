@@ -104,9 +104,12 @@ services:
       KC_CLIENTE_BFF_SEGREDO: ${KC_CLIENTE_BFF_SEGREDO:-demo-segredo-bff-troque-em-producao}
       APP_URL_PUBLICA: ${APP_URL_PUBLICA:-http://localhost:8080}
       KC_DEMO_SENHA: ${KC_DEMO_SENHA:-Demo@2026!}
+      # MFA da equipe ligado por padrão; no demo, KC_FLUXO_NAVEGADOR=browser desliga o 2º fator.
+      KC_FLUXO_NAVEGADOR: ${KC_FLUXO_NAVEGADOR:-navegador-clinica}
     volumes:
       - ./infra/keycloak/${KC_REALM_DIR:-realm-demo}:/opt/keycloak/data/import:ro
       - ./infra/keycloak/themes/clinica:/opt/keycloak/themes/clinica:ro
+      - ./infra/keycloak/password-blacklists:/opt/keycloak/data/password-blacklists:ro
     ports:
       - "${KC_BIND:-127.0.0.1:8180}:8180"
     healthcheck:

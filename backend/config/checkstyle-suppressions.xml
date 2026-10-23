@@ -4,4 +4,7 @@
 <suppressions>
     <!-- A classe @SpringBootApplication precisa de construtor público instanciável pelo Spring. -->
     <suppress checks="HideUtilityClassConstructor" files="ClinicaApplication\.java"/>
+    <!-- Métodos @Bean de *Config só ligam dependências dos casos de uso (sem lógica); o limite de
+         parâmetros vale para código de negócio. -->
+    <suppress checks="ParameterNumber" files="[\\/]infrastructure[\\/]\w+Config\.java"/>
 </suppressions>

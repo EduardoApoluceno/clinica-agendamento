@@ -19,18 +19,30 @@
   "quickLoginCheckMilliSeconds": 1000,
   "maxDeltaTimeSeconds": 43200,
   "failureFactor": 5,
-  "passwordPolicy": "length(10) and maxLength(128) and upperCase(1) and lowerCase(1) and digits(1) and notUsername and notEmail and passwordHistory(3)",
+  "passwordPolicy": "length(10) and maxLength(128) and upperCase(1) and lowerCase(1) and digits(1) and notUsername and notEmail and passwordHistory(3) and passwordBlacklist(senhas-comuns.txt)",
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
   "accessTokenLifespan": 300,
   "internationalizationEnabled": true,
-  "supportedLocales": ["pt-BR"],
+  "supportedLocales": [
+    "pt-BR"
+  ],
   "defaultLocale": "pt-BR",
   "loginTheme": "clinica",
   "emailTheme": "keycloak",
   "eventsEnabled": true,
   "eventsExpiration": 2592000,
-  "enabledEventTypes": ["LOGIN", "LOGIN_ERROR", "REGISTER", "LOGOUT", "UPDATE_PASSWORD", "UPDATE_TOTP", "REMOVE_TOTP", "SEND_RESET_PASSWORD", "VERIFY_EMAIL"],
+  "enabledEventTypes": [
+    "LOGIN",
+    "LOGIN_ERROR",
+    "REGISTER",
+    "LOGOUT",
+    "UPDATE_PASSWORD",
+    "UPDATE_TOTP",
+    "REMOVE_TOTP",
+    "SEND_RESET_PASSWORD",
+    "VERIFY_EMAIL"
+  ],
   "adminEventsEnabled": true,
   "adminEventsDetailsEnabled": false,
   "smtpServer": {
@@ -44,10 +56,54 @@
   },
   "roles": {
     "realm": [
-      { "name": "ADMIN", "description": "Administração da clínica" },
-      { "name": "RECEPCAO", "description": "Recepção" },
-      { "name": "PROFISSIONAL", "description": "Profissional de saúde" },
-      { "name": "PACIENTE", "description": "Paciente" }
+      {
+        "name": "EQUIPE",
+        "description": "Membro da equipe (exige MFA)"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Administração da clínica",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "EQUIPE"
+          ]
+        }
+      },
+      {
+        "name": "RECEPCAO",
+        "description": "Recepção",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "EQUIPE"
+          ]
+        }
+      },
+      {
+        "name": "PROFISSIONAL",
+        "description": "Profissional de saúde",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "EQUIPE"
+          ]
+        }
+      },
+      {
+        "name": "PACIENTE",
+        "description": "Paciente"
+      },
+      {
+        "name": "default-roles-clinica",
+        "description": "Papéis padrão (autocadastro = paciente)",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PACIENTE"
+          ]
+        }
+      }
     ]
   },
   "clients": [
@@ -64,15 +120,26 @@
       "implicitFlowEnabled": false,
       "serviceAccountsEnabled": false,
       "frontchannelLogout": true,
-      "redirectUris": ["${APP_URL_PUBLICA}/login/oauth2/code/keycloak"],
+      "redirectUris": [
+        "${APP_URL_PUBLICA}/login/oauth2/code/keycloak"
+      ],
       "webOrigins": [],
       "attributes": {
         "pkce.code.challenge.method": "S256",
         "post.logout.redirect.uris": "${APP_URL_PUBLICA}/",
         "backchannel.logout.session.required": "true"
       },
-      "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "basic", "email"],
-      "optionalClientScopes": ["offline_access"],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
       "protocolMappers": [
         {
           "name": "papeis-no-id-token",
@@ -93,46 +160,283 @@
   ],
   "users": [
     {
-      "username": "admin@clinica.local", "email": "admin@clinica.local", "emailVerified": true, "enabled": true,
-      "firstName": "Administração", "lastName": "Demo",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["ADMIN"]
+      "username": "admin@clinica.local",
+      "email": "admin@clinica.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Administração",
+      "lastName": "Demo",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
     },
     {
-      "username": "recepcao@clinica.local", "email": "recepcao@clinica.local", "emailVerified": true, "enabled": true,
-      "firstName": "Renata", "lastName": "Recepção",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["RECEPCAO"]
+      "username": "recepcao@clinica.local",
+      "email": "recepcao@clinica.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Renata",
+      "lastName": "Recepção",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "RECEPCAO"
+      ]
     },
     {
-      "username": "dra.ana@clinica.local", "email": "dra.ana@clinica.local", "emailVerified": true, "enabled": true,
-      "firstName": "Ana", "lastName": "Souza",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["PROFISSIONAL"]
+      "username": "dra.ana@clinica.local",
+      "email": "dra.ana@clinica.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ana",
+      "lastName": "Souza",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PROFISSIONAL"
+      ]
     },
     {
-      "username": "dr.bruno@clinica.local", "email": "dr.bruno@clinica.local", "emailVerified": true, "enabled": true,
-      "firstName": "Bruno", "lastName": "Lima",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["PROFISSIONAL"]
+      "username": "dr.bruno@clinica.local",
+      "email": "dr.bruno@clinica.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Bruno",
+      "lastName": "Lima",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PROFISSIONAL"
+      ]
     },
     {
-      "username": "carla@exemplo.com", "email": "carla@exemplo.com", "emailVerified": true, "enabled": true,
-      "firstName": "Carla", "lastName": "Mendes",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["PACIENTE"]
+      "username": "carla@exemplo.com",
+      "email": "carla@exemplo.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Carla",
+      "lastName": "Mendes",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PACIENTE"
+      ]
     },
     {
-      "username": "diego@exemplo.com", "email": "diego@exemplo.com", "emailVerified": true, "enabled": true,
-      "firstName": "Diego", "lastName": "Rocha",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["PACIENTE"]
+      "username": "diego@exemplo.com",
+      "email": "diego@exemplo.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Diego",
+      "lastName": "Rocha",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PACIENTE"
+      ]
     },
     {
-      "username": "elisa@exemplo.com", "email": "elisa@exemplo.com", "emailVerified": true, "enabled": true,
-      "firstName": "Elisa", "lastName": "Prado",
-      "credentials": [{ "type": "password", "value": "${KC_DEMO_SENHA}", "temporary": false }],
-      "realmRoles": ["PACIENTE"]
+      "username": "elisa@exemplo.com",
+      "email": "elisa@exemplo.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Elisa",
+      "lastName": "Prado",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${KC_DEMO_SENHA}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PACIENTE"
+      ]
     }
-  ]
+  ],
+  "defaultRole": {
+    "name": "default-roles-clinica",
+    "composite": true
+  },
+  "browserFlow": "${KC_FLUXO_NAVEGADOR:navegador-clinica}",
+  "authenticationFlows": [
+    {
+      "alias": "navegador-clinica",
+      "description": "Login com MFA obrigatório para a equipe (passkey ou TOTP)",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "flowAlias": "navegador-clinica formularios",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "navegador-clinica formularios",
+      "description": "Usuário e senha + segundo fator condicional",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "flowAlias": "navegador-clinica mfa equipe",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "navegador-clinica mfa equipe",
+      "description": "Segundo fator obrigatório para o papel EQUIPE",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticator": "conditional-user-role",
+          "authenticatorConfig": "papel-equipe"
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "flowAlias": "navegador-clinica mfa passkey"
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 30,
+          "userSetupAllowed": false,
+          "flowAlias": "navegador-clinica mfa totp"
+        }
+      ]
+    },
+    {
+      "alias": "navegador-clinica mfa passkey",
+      "description": "Passkey (preferencial), quando cadastrada",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticator": "conditional-user-configured"
+        },
+        {
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "authenticator": "webauthn-authenticator"
+        }
+      ]
+    },
+    {
+      "alias": "navegador-clinica mfa totp",
+      "description": "TOTP quando nenhuma passkey foi usada; cadastra no primeiro acesso",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticator": "conditional-credential",
+          "authenticatorConfig": "sem-passkey"
+        },
+        {
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": true,
+          "authenticator": "auth-otp-form"
+        }
+      ]
+    }
+  ],
+  "authenticatorConfig": [
+    {
+      "alias": "papel-equipe",
+      "config": {
+        "condUserRole": "EQUIPE",
+        "negate": "false"
+      }
+    },
+    {
+      "alias": "sem-passkey",
+      "config": {
+        "credentials": "webauthn",
+        "included": "false"
+      }
+    }
+  ],
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "webAuthnPolicyRpEntityName": "Clínica",
+  "webAuthnPolicyUserVerificationRequirement": "preferred"
 }
