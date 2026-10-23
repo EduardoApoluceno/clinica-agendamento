@@ -1,6 +1,6 @@
 # Pendências
 
-## Estado em 2026-10-23: Fase 1 concluída no código; falta só confirmar o E2E no CI
+## Estado em 2026-10-23: Fase 1 concluída (CI todo verde, inclusive o E2E, no commit 1cc21db)
 
 ### Pronto (backend + Keycloak)
 - **Clínica:** dados e regras da agenda, com concorrência otimista, endpoint público e criação idempotente na 1ª subida.
@@ -33,15 +33,18 @@
 - Testes: 31 no Vitest (menu por permissão, validadores, regra do expediente, fluxo de Meu cadastro com API simulada).
 - **Playwright** (`frontend/e2e`, job **E2E Playwright** no CI, perfil demo com Keycloak e Mailpit):
   autocadastro com verificação de e-mail e de celular; login da equipe com cadastro de TOTP e login com código.
+  Verde no CI. Ao rodar pela 1ª vez, achou dois bugs, já corrigidos: o Keycloak não subia no perfil `demo`
+  (`KC_PROXY_HEADERS` vazio) e o botão Sair dava 403 (token CSRF cru no formulário; agora vai mascarado).
+  Com verificação de e-mail, o Keycloak 26.8 só pede a senha depois do link do e-mail (comportamento padrão).
 
 ### ADRs escritos nesta fase
 - ADR-0015 códigos de verificação no PostgreSQL · ADR-0016 vínculo de cadastro · ADR-0017 fluxo de MFA ·
   ADR-0018 hash da auditoria no banco.
 
 ### Abertas da Fase 1
-1. Confirmar o job E2E verde no CI (os seletores do Keycloak não puderam ser testados localmente sem Docker).
-2. Notificação de login em novo dispositivo: o Keycloak não tem nativamente (avaliar um event listener SPI).
-3. Limpeza periódica de `codigo_verificacao` vencidos (ADR-0015), junto com as notificações da Fase 3.
+1. Notificação de login em novo dispositivo: o Keycloak não tem nativamente (avaliar um event listener SPI).
+2. Limpeza periódica de `codigo_verificacao` vencidos (ADR-0015), junto com as notificações da Fase 3.
+3. Cobrir no E2E o "Esqueceu sua senha?".
 4. Anonimização LGPD: implementar na Fase 5, junto com as regras de guarda do prontuário.
 
 ## Pendências da Fase 0 (abertas)
