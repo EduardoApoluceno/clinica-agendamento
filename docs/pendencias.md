@@ -42,9 +42,7 @@
 1. Confirmar o job E2E verde no CI (os seletores do Keycloak não puderam ser testados localmente sem Docker).
 2. Notificação de login em novo dispositivo: o Keycloak não tem nativamente (avaliar um event listener SPI).
 3. Limpeza periódica de `codigo_verificacao` vencidos (ADR-0015), junto com as notificações da Fase 3.
-4. Cobrir no E2E o "Esqueceu sua senha?" e conferir os demais fluxos padrão do realm (o de cadastro vinha
-   sem senha porque o realm define fluxos próprios; agora é explícito).
-5. Anonimização LGPD: implementar na Fase 5, junto com as regras de guarda do prontuário.
+4. Anonimização LGPD: implementar na Fase 5, junto com as regras de guarda do prontuário.
 
 ## Pendências da Fase 0 (abertas)
 

@@ -291,48 +291,7 @@
     "composite": true
   },
   "browserFlow": "${KC_FLUXO_NAVEGADOR:navegador-clinica}",
-  "registrationFlow": "cadastro-clinica",
   "authenticationFlows": [
-    {
-      "alias": "cadastro-clinica",
-      "description": "Autocadastro do paciente: dados do perfil e senha (com a política do realm)",
-      "providerId": "basic-flow",
-      "topLevel": true,
-      "builtIn": false,
-      "authenticationExecutions": [
-        {
-          "authenticator": "registration-page-form",
-          "authenticatorFlow": true,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": "cadastro-clinica formulario",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "cadastro-clinica formulario",
-      "description": "Formulário de cadastro",
-      "providerId": "form-flow",
-      "topLevel": false,
-      "builtIn": false,
-      "authenticationExecutions": [
-        {
-          "authenticator": "registration-user-creation",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticator": "registration-password-action",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "userSetupAllowed": false
-        }
-      ]
-    },
     {
       "alias": "navegador-clinica",
       "description": "Login com MFA obrigatório para a equipe (passkey ou TOTP)",
