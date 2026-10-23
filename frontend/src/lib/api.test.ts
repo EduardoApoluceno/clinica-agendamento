@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { api, ErroApi, lerCookie } from './api'
+import { api, ErroApi, lerCookie, mascararCsrf } from './api'
 
 describe('lerCookie', () => {
   it('lê o valor decodificado do cookie pedido', () => {
@@ -49,5 +49,23 @@ describe('api', () => {
     expect(erro).toBeInstanceOf(ErroApi)
     expect((erro as ErroApi).status).toBe(409)
     expect((erro as ErroApi).message).toBe(problema.detail)
+  })
+})
+
+describe('mascararCsrf', () => {
+  it('gera base64url(aleatório ‖ token XOR aleatório), como o Spring Security espera no formulário', () => {
+    const sal = new Uint8Array([1, 2, 3])
+    // 'abc' = 0x61 0x62 0x63 → XOR 01 02 03 = 0x60 0x60 0x60
+    expect(mascararCsrf('abc', sal)).toBe(btoa(String.fromCharCode(1, 2, 3, 0x60, 0x60, 0x60)))
+  })
+
+  it('muda a cada chamada e recupera o token original', () => {
+    const token = '4b2c9e1f-7d3a-4e8b-9c0d-a1b2c3d4e5f6'
+    const a = mascararCsrf(token)
+    expect(a).not.toBe(mascararCsrf(token))
+    const bytes = Uint8Array.from(atob(a.replaceAll('-', '+').replaceAll('_', '/')), (c) => c.charCodeAt(0))
+    const metade = bytes.length / 2
+    const original = bytes.slice(metade).map((b, i) => b ^ bytes[i]!)
+    expect(new TextDecoder().decode(original)).toBe(token)
   })
 })

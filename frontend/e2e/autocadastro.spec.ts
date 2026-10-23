@@ -7,13 +7,13 @@ const SENHA_PACIENTE = 'Paciente#2026xY'
 async function criarConta(page: Page, nome: string, sobrenome: string) {
   const email = `e2e-${nome.toLowerCase()}-${Date.now()}@exemplo.com`
   await page.goto('/')
-  await page.locator('a[href*="registrations"]').click()
+  await page.getByRole('link', { name: 'Cadastre-se' }).click()
   await page.locator('#email').fill(email)
   await page.locator('#firstName').fill(nome)
   await page.locator('#lastName').fill(sobrenome)
   await page.locator('#password').fill(SENHA_PACIENTE)
   await page.locator('#password-confirm').fill(SENHA_PACIENTE)
-  await page.locator('#kc-form-buttons [type=submit]').click()
+  await page.locator('#kc-register-form [type=submit]').click()
 
   await page.goto(await linkDeVerificacao(email))
   // Na mesma sessão o Keycloak volta direto ao app; se parar numa página informativa, o SSO resolve.

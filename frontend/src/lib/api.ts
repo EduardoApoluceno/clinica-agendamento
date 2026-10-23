@@ -52,6 +52,19 @@ export function irParaLogin() {
   window.location.assign(URL_LOGIN)
 }
 
+/**
+ * Token CSRF no formato que o Spring Security espera em campo de formulário (`csrf.spa()` aceita o valor cru
+ * só no cabeçalho X-XSRF-TOKEN): base64url(aleatório ‖ token XOR aleatório), como o XorCsrfTokenRequestAttributeHandler.
+ */
+export function mascararCsrf(token: string, aleatorio?: Uint8Array): string {
+  const bytes = new TextEncoder().encode(token)
+  const sal = aleatorio ?? crypto.getRandomValues(new Uint8Array(bytes.length))
+  const combinado = new Uint8Array(bytes.length * 2)
+  combinado.set(sal)
+  bytes.forEach((b, i) => { combinado[bytes.length + i] = b ^ sal[i]! })
+  return btoa(String.fromCharCode(...combinado)).replaceAll('+', '-').replaceAll('/', '_')
+}
+
 /** Logout global: POST com CSRF; o backend encerra a sessão local e no Keycloak. */
 export function sair() {
   const form = document.createElement('form')
@@ -62,7 +75,7 @@ export function sair() {
     const campo = document.createElement('input')
     campo.type = 'hidden'
     campo.name = '_csrf'
-    campo.value = csrf
+    campo.value = mascararCsrf(csrf)
     form.appendChild(campo)
   }
   document.body.appendChild(form)
