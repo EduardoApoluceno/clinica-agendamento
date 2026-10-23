@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.endsWith;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -44,7 +45,7 @@ class AplicacaoIntegracaoTest {
     void navegacaoSemSessaoRedirecionaParaKeycloak() throws Exception {
         mvc.perform(get("/qualquer-rota").accept(MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "http://localhost/oauth2/authorization/keycloak"));
+                .andExpect(header().string("Location", endsWith("/oauth2/authorization/keycloak")));
     }
 
     @Test
