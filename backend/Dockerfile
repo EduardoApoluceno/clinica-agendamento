@@ -11,8 +11,9 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B -q package -DskipTests -Dchecksty
 
 # ---------- runtime ----------
 FROM eclipse-temurin:25-jre-alpine
+# apk upgrade: correções de segurança do Alpine publicadas depois da imagem base (Trivy do CI).
 RUN addgroup -S -g 10001 app && adduser -S -u 10001 -G app app \
-    && apk add --no-cache wget
+    && apk upgrade --no-cache && apk add --no-cache wget
 WORKDIR /app
 COPY --from=build --chown=app:app /extraido/dependencies/ ./
 COPY --from=build --chown=app:app /extraido/spring-boot-loader/ ./
