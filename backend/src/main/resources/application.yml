@@ -94,6 +94,8 @@ app:
     chave-hmac: ${APP_CRIPTO_CHAVE_HMAC:}
   auth:
     modo: OIDC
+    # Fluxo de login do realm (mesma variável do Keycloak); o perfil prod recusa "browser" (sem MFA, ADR-0017).
+    fluxo-navegador: ${KC_FLUXO_NAVEGADOR:navegador-clinica}
     oidc:
       client-id: ${OIDC_CLIENT_ID:clinica-bff}
       client-secret: ${OIDC_CLIENT_SECRET:}

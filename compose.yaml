@@ -34,6 +34,12 @@ x-backend: &backend
     OIDC_ISSUER_PUBLICO: ${KC_URL_PUBLICA:-http://localhost:8180}/realms/clinica
     OIDC_ISSUER_INTERNO: ${KC_URL_INTERNA:-http://keycloak:8180}/realms/clinica
     SESSAO_COOKIE_NOME: ${SESSAO_COOKIE_NOME:-__Host-SESSION}
+    # Repassado só para o perfil prod recusar o fluxo sem MFA.
+    KC_FLUXO_NAVEGADOR: ${KC_FLUXO_NAVEGADOR:-navegador-clinica}
+    # Sem valor: repassa do ambiente/.env só se definidas; no demo valem as chaves do application.yml.
+    APP_CRIPTO_CHAVE_ATIVA:
+    APP_CRIPTO_CHAVE_K1:
+    APP_CRIPTO_CHAVE_HMAC:
   networks: [interna]
 
 services:

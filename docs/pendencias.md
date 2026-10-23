@@ -1,6 +1,6 @@
 # Pendências
 
-## Estado em 2026-10-23: Fase 1 concluída (CI todo verde, inclusive o E2E, no commit 1cc21db)
+## Estado em 2026-10-23: Fase 1 concluída e fechada (CI todo verde, inclusive o E2E)
 
 ### Pronto (backend + Keycloak)
 - **Clínica:** dados e regras da agenda, com concorrência otimista, endpoint público e criação idempotente na 1ª subida.
@@ -36,6 +36,10 @@
   Verde no CI. Ao rodar pela 1ª vez, achou dois bugs, já corrigidos: o Keycloak não subia no perfil `demo`
   (`KC_PROXY_HEADERS` vazio) e o botão Sair dava 403 (token CSRF cru no formulário; agora vai mascarado).
   Com verificação de e-mail, o Keycloak 26.8 só pede a senha depois do link do e-mail (comportamento padrão).
+  "Esqueceu sua senha?" coberto (`e2e/senha.spec.ts`): link do e-mail, senha nova, senha antiga recusada.
+- **Guarda do perfil prod** (`GuardaProducao`/`RegrasProducao`): o backend não sobe com senhas de banco/Redis,
+  segredo OIDC ou chaves de criptografia vazios ou iguais aos de demonstração, nem com `KC_FLUXO_NAVEGADOR=browser`.
+  O compose agora repassa `APP_CRIPTO_CHAVE_*` ao backend (antes não chegavam em prod).
 
 ### ADRs escritos nesta fase
 - ADR-0015 códigos de verificação no PostgreSQL · ADR-0016 vínculo de cadastro · ADR-0017 fluxo de MFA ·
@@ -44,15 +48,15 @@
 ### Abertas da Fase 1
 1. Notificação de login em novo dispositivo: o Keycloak não tem nativamente (avaliar um event listener SPI).
 2. Limpeza periódica de `codigo_verificacao` vencidos (ADR-0015), junto com as notificações da Fase 3.
-3. Cobrir no E2E o "Esqueceu sua senha?".
-4. Anonimização LGPD: implementar na Fase 5, junto com as regras de guarda do prontuário.
+3. Anonimização LGPD: implementar na Fase 5, junto com as regras de guarda do prontuário.
 
-## Pendências da Fase 0 (abertas)
+## Pendências da Fase 0
+
+Resolvidas em 2026-10-23: **P0-1** (SVM ligado na BIOS; o perfil `demo` sobe inteiro no Windows com Docker
+Desktop) e **P0-7** (guarda do perfil prod, acima).
 
 | # | Pendência | Situação |
 |---|---|---|
-| P0-1 | Validar a stack Docker local de ponta a ponta | A virtualização da CPU (AMD SVM) está **desligada na BIOS**: ativar `SVM Mode` no UEFI da placa ASUS. O CI já sobe os perfis demo-leve (ZAP) e demo (E2E) |
 | P0-4 | Renovate para atualizações de dependências | Aberta |
 | P0-5 | ZAP baseline bloqueante | Agora há telas reais: avaliar o relatório e tornar bloqueante |
 | P0-6 | Protótipo visual aprovado não disponível | Telas seguem a descrição do prompt |
-| P0-7 | Guarda no perfil `prod` contra segredos de demonstração | Parcial: `expor-codigos` e modo SIMPLES já são recusados em prod; falta checar as chaves e recusar `KC_FLUXO_NAVEGADOR=browser` (ADR-0017) |

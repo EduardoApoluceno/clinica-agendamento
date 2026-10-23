@@ -1,29 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { celularAleatorio, cpfAleatorio, linkDeVerificacao } from './apoio'
-
-const SENHA_PACIENTE = 'Paciente#2026xY'
-
-/**
- * Autocadastro no Keycloak até entrar no app. Com verificação de e-mail ligada, o Keycloak 26 não pede a senha
- * no formulário: ela é definida logo depois de abrir o link do e-mail (só quem prova o e-mail escolhe a senha).
- */
-async function criarConta(page: Page, nome: string, sobrenome: string) {
-  const email = `e2e-${nome.toLowerCase()}-${Date.now()}@exemplo.com`
-  await page.goto('/')
-  await page.getByRole('link', { name: 'Cadastre-se' }).click()
-  await page.locator('#email').fill(email)
-  await page.locator('#firstName').fill(nome)
-  await page.locator('#lastName').fill(sobrenome)
-  await page.locator('#kc-register-form [type=submit]').click()
-
-  await page.goto(await linkDeVerificacao(email))
-  await page.locator('#password-new').fill(SENHA_PACIENTE)
-  await page.locator('#password-confirm').fill(SENHA_PACIENTE)
-  await page.locator('#kc-passwd-update-form #kc-submit').click()
-  // Na mesma sessão o Keycloak volta direto ao app; se parar numa página informativa, o SSO resolve.
-  if (page.url().includes('/realms/')) await page.goto('/')
-  await expect(page.getByRole('heading', { name: /^Olá,/ })).toBeVisible()
-}
+import { celularAleatorio, cpfAleatorio, criarConta } from './apoio'
 
 async function completarCadastro(page: Page, nomeCompleto: string) {
   await page.getByLabel(/Nome completo/).fill(nomeCompleto)

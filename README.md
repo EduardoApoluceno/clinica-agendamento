@@ -3,8 +3,9 @@
 Monólito modular (Java 25 + Spring Boot 4.1 + Spring Modulith) com frontend React 19, Keycloak (BFF
 OAuth2/OIDC), PostgreSQL 18 e Redis. Roda 100% local com Docker, sem nenhuma conta externa.
 
-> **Estado atual: Fase 0 (fundação).** Login, papéis, esqueleto dos 14 módulos, banco base,
-> auditoria append-only, CI e design tokens. As telas de negócio chegam a partir da Fase 2.
+> **Estado atual: Fase 1 concluída (cadastros e acesso).** Login com MFA para a equipe, permissões por
+> papel, clínica, profissionais (serviços, expediente, ausências), pacientes com dados cifrados e
+> consentimentos LGPD, auditoria com hash encadeado e testes de ponta a ponta. Próxima: Fase 2 (agenda).
 > Veja [`docs/arquitetura/00-proposta-fase0.md`](docs/arquitetura/00-proposta-fase0.md) e
 > [`docs/pendencias.md`](docs/pendencias.md).
 
@@ -78,6 +79,7 @@ npm run api:gerar                       # gera cliente TanStack Query + Zod via 
 
 # ponta a ponta (Playwright) contra o perfil demo; cria contas e cadastra TOTP do dr.bruno
 npx playwright install chromium && npm run e2e
+# autocadastro, "Esqueceu sua senha?" e MFA da equipe
 ```
 
 Rode o E2E num banco descartável (`docker compose --profile demo down -v` antes): o teste de MFA espera
